@@ -9,6 +9,7 @@ import './adminDashbord.css';
 const access = localStorage.getItem('access')
 function Naol() {
   const [data, setData] = useState([]);
+  const [status, setStatus] = useState(['true'])
   // const [item, setItem] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -19,7 +20,9 @@ function Naol() {
         const response = await axios.get('http://192.168.0.107:8000/api/user_list');
         const responseData = response.data;
         if (Array.isArray(responseData)) {
-          setData(responseData);
+          setData(responseData.map(user => ({ ...user, status: true })));
+        // if (Array.isArray(responseData)) {
+        //   setData(responseData);
         } else {
           console.error('Fetched data is not an array:', responseData);
           setData([]);
@@ -51,9 +54,15 @@ function Naol() {
 
     alert('are you sure')
     try {
-      const response = await axios.post(`http://192.168.0.107:8000/api/deactivate_user ${userId}`);
+      const response = await axios.get(`http://192.168.0.107:8000/api/deactivate_user/${userId}`);
       console.log('User deactivated successfully!', response.data);
-      window.location.reload();
+      // window.location.reload();
+
+      setData((prevData) =>
+        prevData.map(user =>
+          user.id === userId ? { ...user, status: !user.status } : user
+        )
+      );
   
     } catch (error) {
       console.error('Error deactivating user:', error);
@@ -139,7 +148,8 @@ function Naol() {
         <td>{item.email}</td>
         <td>{item.id}</td>
         <td>$100</td>
-        <td><a onClick={() => handleDeactivate(item.id)}><img src={process.env.PUBLIC_URL + '/Icons/deactivate.jpg'} style={{ width: '20px', height: '20px', marginRight:'15px'}} alt='Back' /></a>
+        <td><a onClick={() => handleDeactivate(item.id)}>{item.status? (<img src={process.env.PUBLIC_URL + '/Icons/deactivate.jpg'} style={{ width: '25px', height: '25px' }} alt='Back' />):
+        (<img src={process.env.PUBLIC_URL + '/Icons/activeuser.png'} style={{ width: '25px', height: '25px' }} alt='Back' />)}</a>
         <a onClick={() => handleDelete(item.id)}><img src={process.env.PUBLIC_URL + '/Icons/delete.jpg'} style={{ width: '20px', height: '20px' }} alt='Back' /></a></td>
         </tr>
         ))}</tbody>

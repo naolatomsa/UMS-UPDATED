@@ -30,11 +30,11 @@ const Changepassword = () => {
           <p style={{color:'black'}}>Enter your email for the verification process, we will send 4 digits code to your email.</p>
         </div> */}
         <div className='input2'>
-          <input type='password' placeholder='password' required style={{ backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/password.png')`, backgroundSize: '20px 20px', 
+          <input type='password' placeholder='New password' required style={{ backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/password.png')`, backgroundSize: '20px 20px', 
                 backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px'}}/>
         </div>
         <div className='input2'>
-          <input type='password' placeholder='confirm password' required style={{ backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/password.png')`, backgroundSize: '20px 20px', 
+          <input type='password' placeholder='Confirm new password' required style={{ backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/password.png')`, backgroundSize: '20px 20px', 
                 backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px'}}/>
         </div>
         <button type='submit' style={{marginTop: '30px'}}>Continue</button>
