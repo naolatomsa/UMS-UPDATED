@@ -1,9 +1,24 @@
 import React from 'react'
 import {useNavigate} from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
+
 const ForgetPass = () => {
+  const [Email, setEmail]= useState('');
   const navigate = useNavigate()
-  const handleReset = () => {
-    navigate('./v1')
+
+  const handleReset = async(e) => {
+    e.preventDefault();
+    try{
+      const response = await axios.post('http://192.168.0.107:8000/api/forget_password',{
+        Email
+      })
+      console.log('email sent succesfully', response)
+      navigate('/V3')
+    }catch(error){
+      console.log(error)
+    }
+    
   }
     return (
         <div className='all'>
@@ -30,7 +45,7 @@ const ForgetPass = () => {
                 <p style={{color:'black',fontSize:'17px'}}>Enter your email for the verification process, <br></br>we will send 4 digits code to your email.</p>
               </div>
               <div className='input2'>
-                <input type='email' placeholder='Email' required style={{backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/email.png')`, backgroundSize: '20px 20px', 
+                <input type='email' placeholder='Email' required value={Email} onChange={(e)=>{setEmail(e.target.value)}} style={{backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/email.png')`, backgroundSize: '20px 20px', 
               backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px'}}/>
               </div>
               <button type='submit' style={{marginTop: '30px'}}>Continue</button>

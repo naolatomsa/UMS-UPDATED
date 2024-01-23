@@ -1,10 +1,35 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { useState } from 'react';
+import { useEffect } from 'react';
+
+
 const Changepassword = () => {
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
-  const handleChangepassword = () => {
-    navigate('/');
+  const { token } = useParams();
+  // const { userId} = useParams();
+  const handleChangepassword = async(e) => {
+    e.preventDefault();
+
+    try{
+      const response = await axios.post('http://192.168.0.107:8000/api/forget_password', { 
+        token, newPassword , confirmNewPassword
+      })
+      console.log('sent secussfilly now login', response)
+      navigate('/');
+    }catch(error){
+      console.log(error)
+    }
+    
   };
+  useEffect(() => {
+    // You can log or use the token here
+    console.log('Token from URL:', token);
+  }, [token]);
   return (
     <div className='all'>
     <div className='wow'>
@@ -30,14 +55,14 @@ const Changepassword = () => {
           <p style={{color:'black'}}>Enter your email for the verification process, we will send 4 digits code to your email.</p>
         </div> */}
         <div className='input2'>
-          <input type='password' placeholder='New password' required style={{ backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/password.png')`, backgroundSize: '20px 20px', 
+          <input type='password' placeholder='New password' required value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} style={{ backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/password.png')`, backgroundSize: '20px 20px', 
                 backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px'}}/>
         </div>
         <div className='input2'>
-          <input type='password' placeholder='Confirm new password' required style={{ backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/password.png')`, backgroundSize: '20px 20px', 
+          <input type='password' placeholder='Confirm new password' required value={confirmNewPassword} onChange={(e)=>setConfirmPassword(e.target.value)} style={{ backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/password.png')`, backgroundSize: '20px 20px', 
                 backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px'}}/>
         </div>
-        <button type='submit' style={{marginTop: '30px'}}>Continue</button>
+        <button type='submit' style={{marginTop: '30px'}}>Change</button>
       </form>
     </div>
   </div>

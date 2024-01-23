@@ -1,7 +1,12 @@
 import React from 'react'
 import './login.css'
+import {useNavigate} from 'react-router-dom';
 
 const Verificationpage3= () => {
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate('/forget')
+  }
   return (
     <div className='all'>
     <div className='wow'>
@@ -22,19 +27,23 @@ const Verificationpage3= () => {
     </div>
     <div className='form-container' style={{paddingBottom:'0'}}>
       <form className='form'>
-        <h1 style={{color:'#36AE8B'}}>CREATE NEW PASSWORD</h1>
+        <h1 style={{color:'#36AE8B'}}>Password reset sent</h1>
         {/* <div className='input1'>
           <p style={{color:'black'}}>Enter your email for the verification process, we will send 4 digits code to your email.</p>
         </div> */}
-        <p style={{color:'black',fontSize:'17px'}}>Paste the code we sent to the email you entered to the box below.</p>
+        <p style={{color:'black',fontSize:'17px'}}>We've emailed you instructions for setting your password,<br></br> 
+        if an account exists with the email you entered. <br></br>
+        You should receive them shortly.</p>
         {/* <div className='input2'>
           <input type='password' placeholder='password' required />
         </div> */}
-        <div className='input2'>
+        {/* <div className='input2'>
           <input type='text' placeholder='paste here' required/>
-        </div>
-        <button style={{marginTop: '30px'}}>Continue</button>
-        <p style={{color:'black',fontSize:'17px'}}>If you didn’t receive a code! <a style={{fontSize:'17px'}}>Resend</a></p>
+        </div> */}
+        {/* <button style={{marginTop: '30px'}}>Continue</button> */}
+        <p style={{color:'black',fontSize:'17px'}}>If you don't receive an email,
+        please make sure you’ve <br></br> entered the address you registered with, <br></br>
+        and check your spam folder. Or <a style={{fontSize:'17px'}} onClick={handleBack}> Enter Your Email Again</a></p>
         {/* <p style={{color:'black'}}>If you didn’t receive a code! <a style={{color:'#38A899'}}>Resend</a></p> */}
       </form>
     </div>

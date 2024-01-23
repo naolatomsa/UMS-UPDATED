@@ -79,12 +79,12 @@ const router = createBrowserRouter([
     path: "/forget",
     element: <ForgetPass />,
   },
+  // {
+  //   path: "/forget/v1",
+  //   element: <Verificationpage1 />,
+  // },
   {
-    path: "/forget/v1",
-    element: <Verificationpage1 />,
-  },
-  {
-    path: "/forget/v1/changepassword",
+    path: "/changepassword/:userId/:token",
     element: <Changepassword  />,
   },
   {
