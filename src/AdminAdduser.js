@@ -45,7 +45,7 @@ function AdminAdduser(){
       const handleAdduser = async (e)=>{
         e.preventDefault();
         try{
-          const response = await axios.post("http://127.0.0.1:8000/api/addnew_user", {
+          const response = await axios.post("http://192.168.0.107:8000/api/addnew_user", {
             firstName, lastName, Password, ConfirmPassword, Location, phone, Username, gender
           })
           console(response.data)

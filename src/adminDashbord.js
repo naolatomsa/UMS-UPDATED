@@ -9,12 +9,14 @@ import './adminDashbord.css';
 const access = localStorage.getItem('access')
 function Naol() {
   const [data, setData] = useState([]);
+  // const [item, setItem] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   //Fetch User Data
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/user_list');
+        const response = await axios.get('http://192.168.0.107:8000/api/user_list');
         const responseData = response.data;
         if (Array.isArray(responseData)) {
           setData(responseData);
@@ -32,7 +34,13 @@ function Naol() {
     fetchData();
   }, []);
 
+  //search
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
 
+  const filteredData = data.filter(item =>
+    item.username?.toLowerCase().includes(searchQuery.toLowerCase()));
   //Handle Edit User
   const handleEdituser = async(userId)=>{
 
@@ -40,10 +48,12 @@ function Naol() {
 
   //Handle Deactivate user
   const handleDeactivate = async (userId) => {
+
     alert('are you sure')
     try {
-      const response = await axios.post(`http://127.0.0.1:8000/api/deactivate_user ${userId}`);
+      const response = await axios.post(`http://192.168.0.107:8000/api/deactivate_user ${userId}`);
       console.log('User deactivated successfully!', response.data);
+      window.location.reload();
   
     } catch (error) {
       console.error('Error deactivating user:', error);
@@ -56,9 +66,10 @@ function Naol() {
  const handleDelete = async (userId) => {
     alert('are you sure')
     try {
-      const response = await axios.delete(`http://127.0.0.1:8000/api/delete_user/${userId}`);
+      const response = await axios.delete(`http://192.168.0.107:8000/api/delete_user/${userId}`);
       console.log('User deleted successfully!', response.data);
-      
+      window.location.reload();
+      // setItem(prevItems => prevItems.filter(item => item.id !== userId));
     } catch (error) {
       console.error('Error deleting user:', error);
       
@@ -75,8 +86,8 @@ function Naol() {
       <p style={{
       color: 'black' , fontWeight:'bold'
     }}>User Management</p>
-      <input type="text" placeholder="search" style={{backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/search.png')`, backgroundSize: '20px 20px', 
-                backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px'}}/>
+      <input type="text" placeholder="search" value={searchQuery} onChange={handleSearch} style={{backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/search.png')`, backgroundSize: '20px 20px', 
+                backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px'}} />
     </div>
     <div className="user-role">
       <p style={{
