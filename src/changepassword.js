@@ -10,14 +10,15 @@ const Changepassword = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
+  const { userId } = useParams();
   const { token } = useParams();
   // const { userId} = useParams();
   const handleChangepassword = async(e) => {
     e.preventDefault();
 
     try{
-      const response = await axios.post('http://192.168.0.107:8000/api/forget_password', { 
-        token, newPassword , confirmNewPassword
+      const response = await axios.post('http://192.168.0.111:8000/api/reset_password', { 
+        token, userId, newPassword , confirmNewPassword
       })
       console.log('sent secussfilly now login', response)
       navigate('/');
@@ -28,8 +29,9 @@ const Changepassword = () => {
   };
   useEffect(() => {
     // You can log or use the token here
-    console.log('Token from URL:', token);
-  }, [token]);
+    console.log('userId from URL:', userId);
+    console.log('token from URL:', token);
+  }, [userId]);
   return (
     <div className='all'>
     <div className='wow'>

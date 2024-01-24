@@ -20,8 +20,8 @@ const UserDashboard = () => {
         alt="User image"
         className="card__image"
       /> */}
-      <div class="wrapper userprofile">
-            <a class="third after" style={{fontSize:'17px'}}>My profile</a>
+      <div className="wrapper userprofile">
+            <a className="third after" style={{fontSize:'17px'}}>My profile</a>
             <a onClick={handleUserDashboard} className='third after' style={{fontSize:'17px'}}>Update profile</a>
          </div>
 

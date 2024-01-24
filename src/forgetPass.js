@@ -10,7 +10,7 @@ const ForgetPass = () => {
   const handleReset = async(e) => {
     e.preventDefault();
     try{
-      const response = await axios.post('http://192.168.0.107:8000/api/forget_password',{
+      const response = await axios.post('http://192.168.0.111:8000/api/forget_password',{
         Email
       })
       console.log('email sent succesfully', response)

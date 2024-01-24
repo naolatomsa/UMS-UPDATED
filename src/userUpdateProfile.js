@@ -7,12 +7,19 @@ import './edituser.css'
 import IMG from './img';
 import './topbar.css'
 
+const access = localStorage.getItem('access')
+console.log(access)
 
 const UserUpdateProfile = () => {
 
     const [location, setLocation] = useState('');
     const [countries, setCountries] = useState([]);
     const [showCountriesList, setShowCountriesList] = useState(false);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [gender, setGender] = useState('');
+    const [username, setUserName] = useState('');
     const navigate = useNavigate()
     useEffect(() => {
         const fetchCountries = async () => {
@@ -34,9 +41,28 @@ const UserUpdateProfile = () => {
         setLocation(selectedCountry.name);
         setShowCountriesList(false);
       };
-      const handleUserUpdateProfile = () => {
+      const handleUserUpdateProfile = async(e) => {
+        e.preventDefault();
+        try {
+          const response = await axios.post('http://192.168.0.111:8000/api/update_profile',
+            { firstName, lastName, location, phone, gender, username, 
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${access}`,
+              },
+            }
+          );
 
-        navigate('/userpro')
+          console.log('profile Updated seccusfully!', response.data);
+  
+          // navigate('/setaccount')
+
+        }catch(error){
+          console.log(error);
+        }
+
+        // navigate('/userpro')
     
       };
     
@@ -46,30 +72,31 @@ const UserUpdateProfile = () => {
     <div className="card auserboard">
 
 
-          <div class="wrapper userprofile" style={{height:'50px'}}>
-            <a onClick={handleUserUpdateProfile} class="third after" style={{fontSize:'17px'}}>My profile</a>
+          <div className="wrapper userprofile" style={{height:'50px'}}>
+            <a onClick={handleUserUpdateProfile} className="third after" style={{fontSize:'17px'}}>My profile</a>
             <a className='third after' style={{fontSize:'17px'}}>Update profile</a>
          </div>
       <IMG imgName={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"} 
-            size={'100px'}/>
-        <form className='editform' action='#'>
+            size={'100px'} style={{ backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/addphoto.png')`, backgroundSize: '20px 20px', 
+            backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px' }}/>
+        <form className='editform' onSubmit={handleUserUpdateProfile}>
        
         <div className='input3'>
-            <input type='text' placeholder='first name' required/>
+            <input type='text' placeholder='first name' required value={firstName} onChange={(e)=>setFirstName(e.target.value)}/>
             </div>
         <div className='input2'>
-        <input type="text" placeholder="last name" required/>
+        <input type="text" placeholder="last name" required value={lastName} onChange={(e)=>setLastName(e.target.value)}/>
         </div>
         <div className='input1' style={{width:'300px', height:'48px',marginTop:'8px', border: 'solid 1px #38A899 '}} >
-          <label htmlFor="gender">Gender:<br></br></label>
-        <select id="gender" name="gender">
+          <label htmlFor="gender" >Gender:<br></br></label>
+        <select id="gender" name="gender" value={gender} onChange={(e)=>setGender(e.target.value)}>
             <option value="male" >Male</option>
             <option value="female">Female</option>
             <option value="other">Other</option>
         </select>
           </div>
             <div className='input3'>
-            <input type='tel' placeholder='phone' required/>
+            <input type='tel' placeholder='phone' required value={phone} onChange={(e)=>setPhone(e.target.value)}/>
             </div>
             <div className='input-containeradduser'>
               <div className='inputcountry'>
@@ -106,16 +133,16 @@ const UserUpdateProfile = () => {
             </div>
 
             <div className='input2'>
-            <input type='content' placeholder='user name' required/>
+            <input type='text' placeholder='user name' required value={username} onChange={(e)=>setUserName(e.target.value)}/>
             </div>
-            <div className='input3'>
+            {/* <div className='input3'>
             <input type='password' placeholder='password' required/>
             </div>
         <div className='input2'>
         <input type="password" placeholder="confirm password" required/>
-        </div>
+        </div> */}
             <div className='input6' style={{gridColumn: '-3 / -1', paddingLeft:'240px'}}>
-            <button >Update</button>
+            <button type='submit'>Update</button>
             </div>
         </form>
 
@@ -124,4 +151,4 @@ const UserUpdateProfile = () => {
   )
 }
 
-export default UserUpdateProfile
+export default UserUpdateProfile;
