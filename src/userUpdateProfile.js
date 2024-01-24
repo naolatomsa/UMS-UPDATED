@@ -22,9 +22,9 @@ const UserUpdateProfile = () => {
     const [username, setUserName] = useState('');
     const navigate = useNavigate()
     useEffect(() => {
-        const fetchCountries = async () => {
-          try {
-            const response = await axios.get('https://restcountries.com/v2/all');
+      const fetchCountries = async () => {
+        try {
+          const response = await axios.get('https://restcountries.com/v2/all');
             setCountries(response.data);
           } catch (error) {
             console.error('Error fetching countries:', error);
