@@ -44,7 +44,7 @@ const UserUpdateProfile = () => {
       const handleUserUpdateProfile = async(e) => {
         e.preventDefault();
         try {
-          const response = await axios.post('http://192.168.0.111:8000/api/update_profile',
+          const response = await axios.post('http://127.0.0.1:8000/api/update_profile',
             { firstName, lastName, location, phone, gender, username, 
             },
             {
@@ -56,7 +56,7 @@ const UserUpdateProfile = () => {
 
           console.log('profile Updated seccusfully!', response.data);
   
-          // navigate('/setaccount')
+          
 
         }catch(error){
           console.log(error);
@@ -68,12 +68,12 @@ const UserUpdateProfile = () => {
     
   return (
     <>
-    <TopBar />
+    <TopBar /*name={authInfo.user.name}*/ imageSrc={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"} />
     <div className="card auserboard">
 
 
           <div className="wrapper userprofile" style={{height:'50px'}}>
-            <a onClick={handleUserUpdateProfile} className="third after" style={{fontSize:'17px'}}>My profile</a>
+            <a onClick={()=>navigate('/userpro')} className="third after" style={{fontSize:'17px'}}>My profile</a>
             <a className='third after' style={{fontSize:'17px'}}>Update profile</a>
          </div>
       <IMG imgName={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"} 

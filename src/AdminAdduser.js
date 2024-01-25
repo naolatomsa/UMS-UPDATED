@@ -3,34 +3,37 @@ import { useEffect, useState } from 'react';
 import TopBar from './Topbar'
 import axios from 'axios'
 import './edituser.css'
-import { Navigate } from 'react-router-dom';
+// import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 function AdminAdduser(){
-    const [location, setLocation] = useState('');
-    const [countries, setCountries] = useState([]);
-    const [showCountriesList, setShowCountriesList] = useState(false);
-    const [Username, setUserName] = useState("")
-    const [Password, setPassword] = useState("")
-    // const [Email, setEmail] = useState("")
-    const [ConfirmPassword, setConfirmPassword] = useState("")
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [phone, setPhone] = useState("");
-    const [gender, setGender] = useState("");
-    
-    const [error, setError] = useState('');
 
-    useEffect(() => {
-        const fetchCountries = async () => {
-          try {
-            const response = await axios.get('https://restcountries.com/v2/all');
+  const navigate = useNavigate();
+  const [location, setLocation] = useState('');
+  const [countries, setCountries] = useState([]);
+  const [showCountriesList, setShowCountriesList] = useState(false);
+  const [Username, setUserName] = useState("")
+  const [Password, setPassword] = useState("")
+  // const [Email, setEmail] = useState("")
+  const [ConfirmPassword, setConfirmPassword] = useState("")
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [gender, setGender] = useState("");
+    
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+      const fetchCountries = async () => {
+        try {
+          const response = await axios.get('https://restcountries.com/v2/all');
             setCountries(response.data);
 
           } catch (error) {
             console.error('Error fetching countries:', error);
           }
-        };
+      };
     
         fetchCountries();
       }, []);
@@ -49,7 +52,7 @@ function AdminAdduser(){
             firstName, lastName, Password, ConfirmPassword, Location, phone, Username, gender
           })
           console(response.data)
-          Navigate("/Admin Dashbord")
+          navigate("/Admin Dashbord")
 
         } catch(error){
           console.error(error);
@@ -58,10 +61,11 @@ function AdminAdduser(){
         }
       }
 
+
   return (
     <div className='Add-user'>
-        <TopBar />
-        <img src={process.env.PUBLIC_URL + '/Icons/back.png'} style={{ width: '26px', height: '26px', marginLeft:'100px' }} alt='Back' />
+        <TopBar /*name={authInfo.user.name}*/ imageSrc={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"}/>
+        <a onClick={()=>navigate('/Admin Dashbord')}><img src={process.env.PUBLIC_URL + '/Icons/back.png'} style={{ width: '26px', height: '26px', marginLeft:'100px' }} alt='Back' /></a>
         <div className='form-container adduser'>
         <form className='form editform' style={{height:"500px"}} onSubmit={handleAdduser}>
         <h1 className='htwo'>Add New User</h1>

@@ -22,7 +22,7 @@ function AdminProfile(){
 
         <div class="edituser">
         
-        <div className='tolbar1'><TopBar /></div>
+        <div className='tolbar1'><TopBar /*name={authInfo.user.name}*/ imageSrc={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"}/></div>
        
         <Gule />
         

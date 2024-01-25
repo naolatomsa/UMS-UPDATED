@@ -7,7 +7,6 @@ function View() {
   return (
 
     <div className='activitybox'> 
-    <p>Naol</p>
       <table class="responsivetable activitytable">
         <thead>
           <tr class="Date">

@@ -18,6 +18,8 @@ function SetAcount() {
   const [countries, setCountries] = useState([]);
   const [showCountriesList, setShowCountriesList] = useState(false);
 
+  const navigate = useNavigate()
+
     
   useEffect(() => {
     const fetchCountries = async () => {
@@ -40,40 +42,34 @@ function SetAcount() {
     setShowCountriesList(false);
   };
 
-  const navigate = useNavigate()
-  // const switchForm = () => {
-    // setClear(!clear);
-  //   setSave(clear ? 'Save Changes' : 'Clear');
-    if(!save){
-      setName("");
-      setGender("");
-      setPhone("");
-      setGender("");
-      setDate("");
-      setLocation("");
-      setUpload("");
-
-    };
 
 
-  const handleSave = () => {
-    // Perform your login logic here
 
-    // After successful login, navigate to the home page
-    // history.push('/Naol');
+  const handleSave = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/signup/', {
+        name, gender, phone, date, location,upload
+      });
 
-    if(name && gender && date && location && phone){
-      
-      // console.log(Username, Password);
-      navigate('/userhome')
+      console.log('Form data sent successfully!', response.data);
 
+      navigate('/userpro')
+    } 
+    catch (error) {
     }
-    else{
-      navigate('/setaccount')
-    }
-
   };
 
+  const handleClear=()=>{
+    setName("");
+    setGender("");
+    setPhone("");
+    setGender("");
+    setDate("");
+    setLocation("");
+    setUpload("");
+
+  }
    
 
   return (
@@ -85,32 +81,34 @@ function SetAcount() {
           <div id="poly1" />
           <div className='midlep'>
             <div>
-            <IMG imgName={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"} 
-        size={'100px'}/>
+            <img src={process.env.PUBLIC_URL + '/Icons/userphoto.png'} style={{backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/backimage.png')`, backgroundSize: 'cover', 
+              backgroundRepeat: 'no-repeat',backgroundPosition: 'center', height:'100px', width:'100px'}} alt='Back'  className="topicon"/>
             </div>
         
-            <p >
+            <p className='fp'>
             Set up your profile. Let’s know a little bit about you.
             </p>
-            <p> This won’t take long.</p>
+            <p className='fp'> This won’t take long.</p>
+            <a onClick={()=>navigate('/userpro')}><img src={process.env.PUBLIC_URL + '/Icons/backpage.png'} style={{ width: '26px', height: '26px' }} alt='Back'  className="topicon"/></a>
           </div>
         </div>
       </div>
       <div className='form-container'>
-        <form className='form' action='#'>
+        <form className='form' onSubmit={handleSave}>
           <h1 className='h2'>Finish Account Setup</h1>
           <div className='input3'>
             <input type='text' placeholder='name' required value={name} onChange={(e)=>{setName(e.target.value)}}/>
             </div>
     
-          <div className='input1' style={{width:'300px', border: 'solid 1px #38A899 '}} >
-          <label htmlFor="gender">Gender:<br></br></label>
-        <select id="gender" name="gender" value={gender} onChange={(e)=>{setGender(e.target.value)}}>
-            <option value="male" >Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-        </select>
-          </div>
+        <div className="gender">
+          <label>
+            <select>
+                  <option value="" disabled selected>Gender</option>
+                  <option>Male</option>
+                  <option>Female</option>
+              </select>
+          </label>
+        </div>
           <div className='input2'>
           <input type="tel" name="phone" placeholder="Enter your phone number" required value={phone} onChange={(e)=>{setPhone(e.target.value)}}/>
           </div>
@@ -118,49 +116,45 @@ function SetAcount() {
             <div className='input4'>
               <input type='date' placeholder='Date of birth' required value={date} onChange={(e)=>{setDate(e.target.value)}}/>
             </div>
-            <div className='input-container'>
-              <div className='inputcountry'>
-                <input
-                  type='text'
-                  placeholder='Location'
+            <div className='inputcountry gender '  >
+                <select
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                />
-                <span className='icon' style={{cursor: 'pointer'}}onClick={handleIconClick}>
-                  &#x25BC;
-                </span>
-              </div>
-              {showCountriesList && (
-                <select  style={{width: '50px'}}
-                  className='countries-list'
-                  onChange={(e) =>
-                    handleCountryChange(
-                      countries.find((country) => country.name === e.target.value)
-                    )
-                  }
                 >
-                  {countries
-                    .filter((country) =>
-                      country.name.toLowerCase().includes(location.toLowerCase())
-                    )
-                    .map((country) => (
-                      <option key={country.alpha3Code} value={country.name}>
-                        {country.name}
-                      </option>
-                    ))}
+                  <option value='' disabled>Select Location</option>
+                  {countries.map((country) => (
+                    <option key={country.alpha2Code} value={country.name}>
+                      {country.name}
+                    </option>
+                  ))}
                 </select>
-              )}
-            </div>
+                {/* <span className='icon' style={{ cursor: 'pointer' }} onClick={handleIconClick}>
+                  &#x25BC;
+                </span> */}
+
+                {showCountriesList && (
+                  <div>
+                    {/* Display the list of countries as needed */}
+                    <ul>
+                      {countries.map((country) => (
+                        <li key={country.alpha2Code} onClick={() => handleCountryChange(country)}>
+                          {country.name}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             <div className='input4'>
               <input type='file' placeholder='upload picture' required value={upload} onChange={(e)=>{setUpload(e.target.value)}}/>
             </div>
             <div className='Buttons'>
             <div>
-              <button className={save==='Clear'? 'InputClear':'input5' } onClick={handleSave}>Save Changes</button>
+              <button type='submit'>Save Changes</button>
             </div>
 
             <div >
-              <button className={save==='Save Changes'? 'InputClear':'input5' } onClick={()=>{setSave('Save Changes')}}>Clear</button>
+              <button type='button' className='InputClear' onClick={handleClear} >Clear</button>
               </div>
               </div>
           <p style={{ color: 'black' }}>

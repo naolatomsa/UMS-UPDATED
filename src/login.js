@@ -42,13 +42,21 @@ function Login() {
       }
   
       try {
-        const response = await axios.post('http://192.168.0.111:8000/api/signup/', {
+        const response = await axios.post('http://127.0.0.1:8000/api/signup/', {
           Username,Email, Password, ConfirmPassword
         });
+
+        const {access} = response.data
+        const {refresh} = response.data
+        const {userRole} = response.data
   
         console.log('Form data sent successfully!', response.data);
   
         navigate('/setaccount')
+
+        localStorage.setItem('access', access);
+        localStorage.setItem('refresh', refresh);
+        localStorage.setItem('userRole', userRole);
       } 
       catch (error) {
         console.error('empty', error);
@@ -64,14 +72,14 @@ function Login() {
     const handleLogin = async (e) => {
       e.preventDefault()
       try {
-        const response = await axios.post('http://192.168.0.111:8000/api/login', {
+        const response = await axios.post('http://127.0.0.1:8000/api/login', {
           Username,
           Password,
         });
 
 
         const {access} = response.data
-        // const {refresh} = response.data
+        const {refresh} = response.data
         const {userRole} = response.data
         if (userRole==="Admin"){
           navigate('/adminpro')
@@ -83,6 +91,7 @@ function Login() {
         
   
         localStorage.setItem('access', access);
+        localStorage.setItem('refresh', refresh);
         localStorage.setItem('userRole', userRole);
 
       } catch (error) {

@@ -55,16 +55,16 @@ const router = createBrowserRouter([
     element: <SetAcount />,
   },
   {
-    path: "/edituser",
+    path: "/edituser/:userId",
     element: <Edit />,
   },
   {
     path: "/userpro",
-    element: access && userRole === "normal_users" ? <UserDashboard /> : <Login />,
+    element: <UserDashboard /> ,
   },
   {
     path: "/updatepro",
-    element: access && userRole === "normal_users" ? <UserUpdateProfile /> : <Login />,
+    element: <UserUpdateProfile />,
   },
   
   {

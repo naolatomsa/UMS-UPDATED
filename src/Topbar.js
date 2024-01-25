@@ -4,7 +4,9 @@ import IMG from "./img";
 import { useNavigate } from "react-router-dom";
 // import { useState } from "react";
 // import { useAuth } from "./Auth-context";
-function TopBar() {
+function TopBar(props) {
+  const name = props.name;
+  const imageSrc = props.imageSrc;
   const navigate = useNavigate();
   // const [userInfo, setUserInfo] = useState(useAuth)
 
@@ -27,9 +29,9 @@ function TopBar() {
      <img src={process.env.PUBLIC_URL + '/Icons/top icon.png'} style={{ width: '26px', height: '26px' }} alt='Back'  className="topicon"/>
      <p className="Iconname">UMS</p>
     
-      <p className="topbarname" style={{color:'white'}}>naol Atomsa</p>
+      <p className="topbarname" style={{color:'white'}}>{name}</p>
       <div className="left">
-      <IMG style={{justfiyself:'start'}} imgName={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"} 
+      <IMG style={{justfiyself:'start'}} imgName={imageSrc} 
         size={'25px'}/>
         <button className='logout' onClick={handleLogout} style={{borderRadius:'10px',cursor:'pointer'}}> logout</button>
         </div>

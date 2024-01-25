@@ -88,3 +88,7 @@ body{
 .updatepro:hover{
     text-decoration: underline #38A899;;
 }
+.adminedituserpage{
+    display: flex;
+    gap: 10px;
+}

@@ -3,21 +3,25 @@ import { useEffect } from 'react';
 import TopBar from './Topbar';
 import axios from 'axios';
 import './adminDashbord.css';
+import { useNavigate } from 'react-router-dom';
 // import IMG from './img';
 
 
 const access = localStorage.getItem('access')
 function Naol() {
   const [data, setData] = useState([]);
+  const [search, setSearch] = useState('');
+  const [role, setRole] = useState('');
   const [status, setStatus] = useState(['true'])
+  const navigate = useNavigate();
   // const [item, setItem] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-
+console.log(search)
   //Fetch User Data
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://192.168.0.107:8000/api/user_list');
+        const response = await axios.get('http://127.0.0.1:8000/api/user_list');
         const responseData = response.data;
         if (Array.isArray(responseData)) {
           setData(responseData.map(user => ({ ...user, status: true })));
@@ -47,6 +51,8 @@ function Naol() {
   //Handle Edit User
   const handleEdituser = async(userId)=>{
 
+    navigate('/edituser/:userId')
+
   }
 
   //Handle Deactivate user
@@ -54,7 +60,7 @@ function Naol() {
 
     alert('are you sure')
     try {
-      const response = await axios.get(`http://192.168.0.107:8000/api/deactivate_user/${userId}`);
+      const response = await axios.get(`http://127.0.0.1:8000//api/deactivate_user/${userId}`);
       console.log('User deactivated successfully!', response.data);
       // window.location.reload();
 
@@ -75,7 +81,7 @@ function Naol() {
  const handleDelete = async (userId) => {
     alert('are you sure')
     try {
-      const response = await axios.delete(`http://192.168.0.107:8000/api/delete_user/${userId}`);
+      const response = await axios.delete(`http://127.0.0.1:8000/api/delete_user/${userId}`);
       console.log('User deleted successfully!', response.data);
       window.location.reload();
       // setItem(prevItems => prevItems.filter(item => item.id !== userId));
@@ -90,12 +96,12 @@ function Naol() {
     <>
     
     <div className="page">
-    <TopBar />
+    <TopBar /*name={authInfo.user.name}*/ imageSrc={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"}/>
     <div className="user-man">
       <p style={{
       color: 'black' , fontWeight:'bold'
     }}>User Management</p>
-      <input type="text" placeholder="search" value={searchQuery} onChange={handleSearch} style={{backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/search.png')`, backgroundSize: '20px 20px', 
+      <input type="text" placeholder="search" value={search} onChange={(e)=>setSearch(e.target.value)} style={{backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/search.png')`, backgroundSize: '20px 20px', 
                 backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px'}} />
     </div>
     <div className="user-role">
@@ -128,7 +134,7 @@ function Naol() {
     }}>
         User <br /> here is a list of all User
       </p>
-      <button>Add User</button>
+      <button onClick={()=>navigate('/adduser')}>Add User</button>
     </div>
 
     <table>
@@ -142,7 +148,11 @@ function Naol() {
         </tr>
         </thead>
         <tbody>
-        {data.map((item) => (
+        {data.filter((item)=>{
+          return search.toLocaleLowerCase()===''? item: item.username.
+          toLowerCase().includes(search) || item.email.
+          toLowerCase().includes(search);
+        }).map((item) => (
         <tr key={item.id}>
         <td><a onClick={handleEdituser(item.id)}>{item.username}</a></td>
         <td>{item.email}</td>
