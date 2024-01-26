@@ -14,7 +14,7 @@ function Naol() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [role, setRole] = useState('');
-  const [status, setStatus] = useState(['true'])
+  // const [status, setStatus] = useState(['true'])
   const navigate = useNavigate();
   // const [item, setItem] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -63,6 +63,7 @@ console.log(search)
     try {
       const response = await axios.get(`http://192.168.0.105:8000/api/deactivate_user/${userId}`);
       console.log('User deactivated successfully!', response.data);
+      
       // window.location.reload();
 
       setData((prevData) =>
@@ -159,7 +160,7 @@ console.log(search)
           <td>{item.email}</td>
           <td>{item.id}</td>
           <td>$100</td>
-          <td><a onClick={() => handleDeactivate(item.id)}>{item.status? (<img src={process.env.PUBLIC_URL + '/Icons/deactivate.jpg'} style={{ width: '25px', height: '25px' }} alt='Back' />):
+          <td><a onClick={() => handleDeactivate(item.id)}>{item.is_active? (<img src={process.env.PUBLIC_URL + '/Icons/deactivate.jpg'} style={{ width: '25px', height: '25px' }} alt='Back' />):
           (<img src={process.env.PUBLIC_URL + '/Icons/activeuser.png'} style={{ width: '25px', height: '25px' }} alt='Back' />)}</a>
           <a onClick={() => handleDelete(item.id)}><img src={process.env.PUBLIC_URL + '/Icons/delete.jpg'} style={{ width: '20px', height: '20px' }} alt='Back' /></a></td>
           </tr>

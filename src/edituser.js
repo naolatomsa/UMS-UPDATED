@@ -14,8 +14,8 @@ import { useParams } from 'react-router-dom';
 function Edit(){
     const authInfo = useAuth();
     const [Username, setUserName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [Email, setEmail] = useState('');
+    const [Password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const { userId } = useParams();
     const [userData, setUserData] = useState({});
@@ -51,9 +51,10 @@ function Edit(){
     const handleEdituser = async(e)=>{
         e.preventDefault();
         try{
-            const response = await axios.put('',{
-                userId, Username, password, confirmPassword, email
+            const response = await axios.put(`http://192.168.0.105:8000/api/user_profile_by_admin/${userId}`,{
+                Username, Password, confirmPassword, Email
             });
+            console.log("Edited seccusfly", response.data)
         }catch(error){
 
         }
@@ -119,10 +120,10 @@ function Edit(){
         <input type="text" placeholder="username" required value={Username} onChange={(e)=>setUserName(e.target.value)}/>
         </div>
         <div className='input2'>
-        <input type="email" placeholder="email" required value={email} onChange={(e)=>setEmail(e.target.value)}/>
+        <input type="email" placeholder="email" required value={Email} onChange={(e)=>setEmail(e.target.value)}/>
         </div>
         <div className='input3'>
-            <input type='password' placeholder='password' required value={password} onChange={(e)=>setPassword(e.target.value)}/>
+            <input type='password' placeholder='password' required value={Password} onChange={(e)=>setPassword(e.target.value)}/>
             </div>
        
 
