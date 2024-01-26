@@ -4,11 +4,13 @@ import TopBar from './Topbar';
 import axios from 'axios';
 import './adminDashbord.css';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './Auth-context';
 // import IMG from './img';
 
 
 const access = localStorage.getItem('access')
 function Naol() {
+  const authInfo = useAuth();
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [role, setRole] = useState('');
@@ -49,11 +51,10 @@ console.log(search)
   const filteredData = data.filter(item =>
     item.username?.toLowerCase().includes(searchQuery.toLowerCase()));
   //Handle Edit User
-  const handleEdituser = async(userId)=>{
+  // const handleEdituser = async(userId)=>{
+  //   navigate('/edituser/:userId')
 
-    navigate('/edituser/:userId')
-
-  }
+  // }
 
   //Handle Deactivate user
   const handleDeactivate = async (userId) => {
@@ -94,77 +95,82 @@ console.log(search)
 
   return (
     <>
-    
-    <div className="page">
-    <TopBar /*name={authInfo.user.name}*/ imageSrc={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"}/>
-    <div className="user-man">
-      <p style={{
-      color: 'black' , fontWeight:'bold'
-    }}>User Management</p>
-      <input type="text" placeholder="search" value={search} onChange={(e)=>setSearch(e.target.value)} style={{backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/search.png')`, backgroundSize: '20px 20px', 
-                backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px'}} />
-    </div>
-    <div className="user-role">
-      <p style={{
-      color: 'black'
-    }}> UMS</p>
-          <div className="selectdiv">
-        <label>
-            <select>
-                <option value="" disabled>Status</option>
-                <option>Active</option>
-                <option>Inactive</option>
-            </select>
-        </label>
+    {
+      authInfo ?(    <div className="page">
+      <TopBar name={authInfo.user.username} imageSrc={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"}/>
+      <div className="user-man">
+        <p style={{
+        color: 'black' , fontWeight:'bold'
+      }}>User Management</p>
+        <input type="text" placeholder="search" value={search} onChange={(e)=>setSearch(e.target.value)} style={{backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/search.png')`, backgroundSize: '20px 20px', 
+                  backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px'}} />
       </div>
-      <div className="selectdiv">
-        <label>
-            <select>
-                <option value="" disabled>Role</option>
-                <option>Admin</option>
-                <option>User</option>
-            </select>
-        </label>
+      <div className="user-role">
+        <p style={{
+        color: 'black'
+      }}> UMS</p>
+            <div className="selectdiv">
+          <label>
+              <select>
+                  <option value="" disabled>Status</option>
+                  <option>Active</option>
+                  <option>Inactive</option>
+              </select>
+          </label>
+        </div>
+        <div className="selectdiv">
+          <label>
+              <select>
+                  <option value="" disabled>Role</option>
+                  <option>Admin</option>
+                  <option>User</option>
+              </select>
+          </label>
+        </div>
+        <button>Filter</button>
       </div>
-      <button>Filter</button>
-    </div>
-    <div className="user-top">
-      <p style={{
-      color: 'black', fontWeight:'bold'
-    }}>
-        User <br /> here is a list of all User
-      </p>
-      <button onClick={()=>navigate('/adduser')}>Add User</button>
-    </div>
+      <div className="user-top">
+        <p style={{
+        color: 'black', fontWeight:'bold'
+      }}>
+          User <br /> here is a list of all User
+        </p>
+        <button onClick={()=>navigate('/adduser')}>Add User</button>
+      </div>
+  
+      <table>
+        <thead>
+          <tr>
+          <th>User Name</th>
+          <th>email</th>
+          <th>Role</th>
+          <th>status</th>
+          <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          {data.filter((item)=>{
+            return search.toLocaleLowerCase()===''? item: item.username.
+            toLowerCase().includes(search) || item.email.
+            toLowerCase().includes(search);
+          }).map((item) => (
+          <tr key={item.id}>
+          <td><a onClick={()=> navigate(`/edituser/${item.id}`)}>{item.username}</a></td>
+          <td>{item.email}</td>
+          <td>{item.id}</td>
+          <td>$100</td>
+          <td><a onClick={() => handleDeactivate(item.id)}>{item.status? (<img src={process.env.PUBLIC_URL + '/Icons/deactivate.jpg'} style={{ width: '25px', height: '25px' }} alt='Back' />):
+          (<img src={process.env.PUBLIC_URL + '/Icons/activeuser.png'} style={{ width: '25px', height: '25px' }} alt='Back' />)}</a>
+          <a onClick={() => handleDelete(item.id)}><img src={process.env.PUBLIC_URL + '/Icons/delete.jpg'} style={{ width: '20px', height: '20px' }} alt='Back' /></a></td>
+          </tr>
+          ))}</tbody>
+        </table>
+    </div>):
+    (
+      <h1>Loading...</h1>
+    )
+    }
 
-    <table>
-      <thead>
-        <tr>
-        <th>User Name</th>
-        <th>email</th>
-        <th>Role</th>
-        <th>status</th>
-        <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        {data.filter((item)=>{
-          return search.toLocaleLowerCase()===''? item: item.username.
-          toLowerCase().includes(search) || item.email.
-          toLowerCase().includes(search);
-        }).map((item) => (
-        <tr key={item.id}>
-        <td><a onClick={handleEdituser(item.id)}>{item.username}</a></td>
-        <td>{item.email}</td>
-        <td>{item.id}</td>
-        <td>$100</td>
-        <td><a onClick={() => handleDeactivate(item.id)}>{item.status? (<img src={process.env.PUBLIC_URL + '/Icons/deactivate.jpg'} style={{ width: '25px', height: '25px' }} alt='Back' />):
-        (<img src={process.env.PUBLIC_URL + '/Icons/activeuser.png'} style={{ width: '25px', height: '25px' }} alt='Back' />)}</a>
-        <a onClick={() => handleDelete(item.id)}><img src={process.env.PUBLIC_URL + '/Icons/delete.jpg'} style={{ width: '20px', height: '20px' }} alt='Back' /></a></td>
-        </tr>
-        ))}</tbody>
-      </table>
-  </div>
     
     </>
   );

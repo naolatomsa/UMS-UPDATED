@@ -6,65 +6,74 @@ import {useNavigate} from 'react-router-dom';
 import './edituser.css'
 import IMG from './img';
 import './topbar.css'
+import { useAuth } from './Auth-context';
 
 const access = localStorage.getItem('access')
-console.log(access)
+// console.log(access)
 
 const UserUpdateProfile = () => {
 
-    const [location, setLocation] = useState('');
-    const [countries, setCountries] = useState([]);
-    const [showCountriesList, setShowCountriesList] = useState(false);
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [phone, setPhone] = useState('');
-    const [gender, setGender] = useState('');
-    const [username, setUserName] = useState('');
-    const navigate = useNavigate()
-    useEffect(() => {
-      const fetchCountries = async () => {
-        try {
-          const response = await axios.get('https://restcountries.com/v2/all');
-            setCountries(response.data);
-          } catch (error) {
-            console.error('Error fetching countries:', error);
-          }
-        };
-    
-        fetchCountries();
-      }, []);
-      const handleIconClick = () => {
-        setShowCountriesList(!showCountriesList);
-      };
-    
-      const handleCountryChange = (selectedCountry) => {
-        setLocation(selectedCountry.name);
-        setShowCountriesList(false);
-      };
-      const handleUserUpdateProfile = async(e) => {
-        e.preventDefault();
-        try {
-          const response = await axios.post('http://192.168.0.105:8000/api/update_profile',
-            { firstName, lastName, location, phone, gender, username, 
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${access}`,
-              },
-            }
-          );
-
-          console.log('profile Updated seccusfully!', response.data);
-  
-          
-
-        }catch(error){
-          console.log(error);
+  const authInfo = useAuth();
+  const [location, setLocation] = useState('');
+  const [countries, setCountries] = useState([]);
+  const [showCountriesList, setShowCountriesList] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [gender, setGender] = useState('');
+  const [email, setEmail] = useState('');
+  const navigate = useNavigate()
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const response = await axios.get('https://restcountries.com/v2/all');
+          setCountries(response.data);
+        } catch (error) {
+          // console.error('Error fetching countries:', error);
         }
-
-        // navigate('/userpro')
-    
       };
+  
+      fetchCountries();
+    }, []);
+    const handleIconClick = () => {
+      setShowCountriesList(!showCountriesList);
+    };
+  
+    const handleCountryChange = (selectedCountry) => {
+      setLocation(selectedCountry.name);
+      setShowCountriesList(false);
+    };
+    const handleUserUpdateProfile = async(e) => {
+      e.preventDefault();
+      try {
+        const response = await axios.post('http://192.168.0.105:8000/api/update_profile',
+          { 
+            firstName, lastName, location, phone, gender, email, 
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${access}`,
+            },
+          }
+        );
+        console.log('profile Updated seccusfully!', response.data);
+        // window.location.reload();
+
+
+        
+
+      }catch(error){
+        // console.log(error);
+      }
+
+      setEmail("")
+      setPhone("")
+      setLocation("")
+      setGender("")
+      setFirstName("")
+      setLastName("")
+  
+    };
     
   return (
     <>
@@ -112,9 +121,6 @@ const UserUpdateProfile = () => {
                     </option>
                   ))}
                 </select>
-                {/* <span className='icon' style={{ cursor: 'pointer' }} onClick={handleIconClick}>
-                  &#x25BC;
-                </span> */}
 
                 {showCountriesList && (
                   <div>
@@ -131,14 +137,8 @@ const UserUpdateProfile = () => {
               </div>
 
             <div className='input2'>
-            <input type='text' placeholder='user name' required value={username} onChange={(e)=>setUserName(e.target.value)}/>
+            <input type='email' placeholder='email' required value={email} onChange={(e)=>setEmail(e.target.value)}/>
             </div>
-            {/* <div className='input3'>
-            <input type='password' placeholder='password' required/>
-            </div>
-        <div className='input2'>
-        <input type="password" placeholder="confirm password" required/>
-        </div> */}
             <div className='input6' style={{gridColumn: '-3 / -1', paddingLeft:'240px'}}>
             <button type='submit'>Update</button>
             </div>

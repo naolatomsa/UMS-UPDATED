@@ -20,11 +20,13 @@ const AuthProvider = ({ children }) => {
           });
 
           const data = response.data;
+          // console.log(data)
 
           setAuthInfo({
-            user: data,
-            token: token,
+             user: data,
+             token: token,
           });
+          // console.log(user)
         } catch (error) {
           console.error('Error fetching user information:', error);
         }

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import './login.css';
-import bcrypt from 'bcryptjs';
+// import bcrypt from 'bcryptjs';
 
 // const usernameRegex = /^[a-zA-Z][a-zA-Z0-9_]{2,19}$/;
 // const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
@@ -17,6 +17,7 @@ function Login() {
   const [Email, setEmail] = useState("")
   const [ConfirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState('');
+  const [isValidPassword, setIsValidPassword] = useState(false);
   const navigate = useNavigate()
   const switchForm = () => {
     setIsSignUp(!isSignUp);
@@ -27,9 +28,11 @@ function Login() {
     
   };
 
-  const saltRounds = 10;
-  const hashedPassword = bcrypt.hash(Password, saltRounds);
-  const hashedConfirmPassword = bcrypt.hash(ConfirmPassword, saltRounds);
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])[a-zA-Z!@#$%^&*()_+0-9]{6,}$/;
+  const isValid = passwordRegex.test(Password);
+  useEffect(()=>{
+   setIsValidPassword(isValid);
+  }, [isValid])
 
   const handleForget = () => {
     navigate('./forget')
@@ -48,7 +51,7 @@ function Login() {
   
       try {
         const response = await axios.post('http://192.168.0.105:8000/api/signup/', {
-          Username,Email, hashedPassword, hashedConfirmPassword 
+          Username,Email, Password, ConfirmPassword 
         });
 
         const {access} = response.data
@@ -79,7 +82,7 @@ function Login() {
       try {
         const response = await axios.post('http://192.168.0.105:8000/api/login', {
           Username,
-          hashedPassword,
+          Password,
         });
 
 
@@ -153,6 +156,15 @@ function Login() {
             <input type='password' required value={Password} onChange={(e)=>{setPassword(e.target.value)}} placeholder={error ? error : 'Password'}
         style={{ borderColor: error ? 'red' : '' , backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/password.png')`, backgroundSize: '20px 20px', 
         backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px'}}/>
+{/* 
+            {isValidPassword ? (
+                <p>Password is valid!</p>
+              ) : (
+                <p>
+                  Password must be at least 6 characters long and contain at least one
+                  lowercase letter, one uppercase letter, and one special character.
+                </p>
+              )} */}
           </div>
           {isSignUp && (
             <div className='input4'>

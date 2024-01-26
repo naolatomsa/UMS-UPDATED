@@ -6,15 +6,18 @@ import IMG from './img';
 import './login.css';
 // import { upload } from '@testing-library/user-event/dist/upload';
 
+const token = localStorage.getItem('access')
+console.log(token)
 function SetAcount() {
   const [save, setSave] = useState('Save Changes');
   // const [clear, setClear] = useState('false');
-  const [name, setName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [firstName, setFirstName] = useState('');
   const [gender, setGender] = useState('');
   const [phone, setPhone] = useState('');
   const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
-  const [upload, setUpload] = useState('');
+  const [image, setImage] = useState('');
   const [countries, setCountries] = useState([]);
   const [showCountriesList, setShowCountriesList] = useState(false);
 
@@ -48,9 +51,17 @@ function SetAcount() {
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://192.168.0.105:8000/api/signup/', {
-        name, gender, phone, date, location,upload
-      });
+      const response = await axios.post(
+        'http://192.168.0.105:8000/api/update_profile',
+        {
+          firstName, lastName, gender, phone, date, location, image,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       console.log('Form data sent successfully!', response.data);
 
@@ -61,13 +72,14 @@ function SetAcount() {
   };
 
   const handleClear=()=>{
-    setName("");
+    setFirstName("");
+    setLastName("")
     setGender("");
     setPhone("");
     setGender("");
     setDate("");
     setLocation("");
-    setUpload("");
+    setImage("");
 
   }
    
@@ -97,7 +109,11 @@ function SetAcount() {
         <form className='form' onSubmit={handleSave}>
           <h1 className='h2'>Finish Account Setup</h1>
           <div className='input3'>
-            <input type='text' placeholder='name' required value={name} onChange={(e)=>{setName(e.target.value)}}/>
+            <input type='text' placeholder='First name' required value={firstName} onChange={(e)=>{setFirstName(e.target.value)}}/>
+            </div>
+
+            <div className='input3'>
+            <input type='text' placeholder='Last name' required value={lastName} onChange={(e)=>{setLastName(e.target.value)}}/>
             </div>
     
         <div className="gender">
@@ -146,7 +162,7 @@ function SetAcount() {
                 )}
               </div>
             <div className='input4'>
-              <input type='file' placeholder='upload picture' required value={upload} onChange={(e)=>{setUpload(e.target.value)}}/>
+              <input type='file' placeholder='upload picture' required value={image} onChange={(e)=>{setImage(e.target.value)}}/>
             </div>
             <div className='Buttons'>
             <div>
