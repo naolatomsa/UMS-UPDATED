@@ -21,7 +21,7 @@ console.log(search)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/user_list');
+        const response = await axios.get('http://192.168.0.105:8000/api/user_list');
         const responseData = response.data;
         if (Array.isArray(responseData)) {
           setData(responseData.map(user => ({ ...user, status: true })));
@@ -60,7 +60,7 @@ console.log(search)
 
     alert('are you sure')
     try {
-      const response = await axios.get(`http://127.0.0.1:8000//api/deactivate_user/${userId}`);
+      const response = await axios.get(`http://192.168.0.105:8000/api/deactivate_user/${userId}`);
       console.log('User deactivated successfully!', response.data);
       // window.location.reload();
 
@@ -81,7 +81,7 @@ console.log(search)
  const handleDelete = async (userId) => {
     alert('are you sure')
     try {
-      const response = await axios.delete(`http://127.0.0.1:8000/api/delete_user/${userId}`);
+      const response = await axios.delete(`http://192.168.0.105:8000/api/delete_user/${userId}`);
       console.log('User deleted successfully!', response.data);
       window.location.reload();
       // setItem(prevItems => prevItems.filter(item => item.id !== userId));

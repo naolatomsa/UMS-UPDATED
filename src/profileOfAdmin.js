@@ -6,21 +6,23 @@ import {useNavigate} from 'react-router-dom';
 import axios from 'axios'
 import IMG from './img';
 import './proofadmin.css';
+import { useAuth } from './Auth-context';
 
 
 const access = localStorage.getItem('access')
 console.log(access);
 
 const ProfileOfAdmin = () => {
-    const [location, setLocation] = useState('');
-    const [countries, setCountries] = useState([]);
-    const [showCountriesList, setShowCountriesList] = useState(false);
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [phone, setPhone] = useState('');
-    const [gender, setGender] = useState('');
-    const [username, setUserName] = useState('');
-    const navigate = useNavigate()
+  const authInfo = useAuth();
+  const [location, setLocation] = useState('');
+  const [countries, setCountries] = useState([]);
+  const [showCountriesList, setShowCountriesList] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [gender, setGender] = useState('');
+  const [username, setUserName] = useState('');
+  const navigate = useNavigate()
     
     useEffect(() => {
         const fetchCountries = async () => {
@@ -42,18 +44,13 @@ const ProfileOfAdmin = () => {
         setLocation(selectedCountry.name);
         setShowCountriesList(false);
       };
-    //   const handleUserUpdateProfile = () => {
-
-    //     navigate('/userpro')
-    
-    //   };
 
 
     const handleAdminUpdateProfile = async(e) => {
       e.preventDefault();
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/update_profile',
-          { firstName, lastName, location, phone, gender, username, 
+        const response = await axios.post('http://192.168.0.105:8000/api/update_profile',{ 
+          firstName, lastName, location, phone, gender, username, 
           },
           {
             headers: {
@@ -64,13 +61,11 @@ const ProfileOfAdmin = () => {
 
         console.log('profile Updated seccusfully!', response.data);
 
-        // navigate('/setaccount')
 
       }catch(error){
         console.log(error);
       }
 
-      // navigate('/userpro')
   
     };
   return (
@@ -80,9 +75,9 @@ const ProfileOfAdmin = () => {
     <div>
 
      <div className='userpage'>
-              <img src={process.env.PUBLIC_URL + '/Icons/back.png'} style={{ width: '26px', height: '26px', marginTop:'20px' }} alt='Back' />
+        <a onClick={()=>navigate('/admin Dashbord')}><img src={process.env.PUBLIC_URL + '/Icons/back.png'} style={{ width: '26px', height: '26px' }} alt='Back' /></a>
 
-          <div className="card">
+          <div className="card" >
             <div className="card1">
             <IMG imgName={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"} 
             size={'100px'}/>
@@ -119,13 +114,9 @@ const ProfileOfAdmin = () => {
           </ul>
         </div>
       </div>
-
-
-
-
     </div>
 
-    <div className="form-container adminprofile">
+    <div className="form-container adminprofile" style={{marginTop:'75px'}}>
       
     <form className='form editform admin-pro' action='#'>
     <h1 className='htwo'>Edit Profile</h1>
@@ -135,60 +126,50 @@ const ProfileOfAdmin = () => {
     <div className='input2'>
     <input type="text" placeholder="last name" required value={lastName} onChange={(e)=>setLastName(e.target.value)}/>
     </div>
-    <div className='input1' style={{width:'300px', border: 'solid 1px #38A899 '}} >
-    <label htmlFor="gender">Gender:<br></br></label>
-    <select id="gender" name="gender" value={gender} onChange={(e)=>setGender(e.target.value)}>
-        <option value="male" >Male</option>
-        <option value="female">Female</option>
-        <option value="other">Other</option>
-    </select>
-    </div>
+    <div className="gender" style={{marginTop:'7.5px'}}>
+              <label>
+                <select value={gender} onChange={(e)=>setGender(e.target.value)}>
+                   <option value="" disabled selected>Gender</option>
+                   <option>Male</option>
+                  <option>Female</option>
+                </select>
+            </label>
+      </div>
         <div className='input3'>
         <input type='tel' placeholder='phone' required value={phone} onChange={(e)=>setPhone(e.target.value)}/>
         </div>
-        <div className='input-containeradduser'>
-        <div className='inputcountry'>
-            <input
-            type='text'
-            placeholder='Location'
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            />
-            <span className='icon' style={{cursor: 'pointer'}}onClick={handleIconClick}>
-            &#x25BC;
-            </span>
-        </div>
-        {showCountriesList && (
-            <select  style={{width: '50px'}}
-            className='countries-list'
-            onChange={(e) =>
-                handleCountryChange(
-                countries.find((country) => country.name === e.target.value)
-                )
-            }
-            >
-            {countries
-                .filter((country) =>
-                country.name.toLowerCase().includes(location.toLowerCase())
-                )
-                .map((country) => (
-                <option key={country.alpha3Code} value={country.name}>
-                    {country.name}
-                </option>
-                ))}
-            </select>
-        )}
-        </div>
+        <div className='inputcountry gender' style={{marginTop:'7.5px'}} >
+                <select
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                >
+                  <option value='' disabled>Select Location</option>
+                  {countries.map((country) => (
+                    <option key={country.alpha2Code} value={country.name}>
+                      {country.name}
+                    </option>
+                  ))}
+                </select>
+                {/* <span className='icon' style={{ cursor: 'pointer' }} onClick={handleIconClick}>
+                  &#x25BC;
+                </span> */}
+
+                {showCountriesList && (
+                  <div>
+                    <ul>
+                      {countries.map((country) => (
+                        <li key={country.alpha2Code} onClick={() => handleCountryChange(country)}>
+                          {country.name}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
 
         <div className='input2'> 
         <input type='text' placeholder='user name' required value={username} onChange={(e)=>setUserName(e.target.value)}/>
         </div>
-        {/* <div className='input3'>
-        <input type='password' placeholder='password' required/>
-        </div>
-    <div className='input2'>
-    <input type="password" placeholder="confirm password" required/>
-    </div> */}
         <div className='input6'>
         <button>Save</button>
         </div>

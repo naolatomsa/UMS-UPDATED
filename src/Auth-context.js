@@ -3,17 +3,17 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 
 const AuthContext = createContext();
-
+// const access = localStorage.getItem('access')
 const AuthProvider = ({ children }) => {
   const [authInfo, setAuthInfo] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('access');
 
     if (token) {
       const fetchData = async () => {
         try {
-          const response = await axios.get('your_backend_endpoint', {
+          const response = await axios.get('http://192.168.0.105:8000/api/user_profile', {
             headers: {
               Authorization: `Bearer ${token}`,
             },

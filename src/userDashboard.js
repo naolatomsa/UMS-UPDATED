@@ -11,7 +11,7 @@ const UserDashboard = () => {
 
   return (
     <>
-    <TopBar /*name={authInfo.user.name}*/ imageSrc={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"}/>
+    <TopBar name={authInfo.user.username} imageSrc={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"}/>
     <div className="card auserboard">
   
     <div className="card1">
@@ -28,7 +28,7 @@ const UserDashboard = () => {
       <IMG imgName={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"} 
       size={'100px'}/>
       <div className="card__text" >
-      <h2>Naol</h2>
+      <h2>1{authInfo.user.username}</h2>
         <p style={{color: 'black'}}>Ethiopia</p>
         <p style={{color: 'black'}}>Addis Ababa</p>
       </div>

@@ -48,7 +48,7 @@ function SetAcount() {
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/signup/', {
+      const response = await axios.post('http://192.168.0.105:8000/api/signup/', {
         name, gender, phone, date, location,upload
       });
 
@@ -93,7 +93,7 @@ function SetAcount() {
           </div>
         </div>
       </div>
-      <div className='form-container'>
+      <div className='form-container' style={{paddingBottom:'0'}}>
         <form className='form' onSubmit={handleSave}>
           <h1 className='h2'>Finish Account Setup</h1>
           <div className='input3'>
@@ -102,7 +102,7 @@ function SetAcount() {
     
         <div className="gender">
           <label>
-            <select>
+            <select value={gender} onChange={(e)=>setGender(e.target.value)}>
                   <option value="" disabled selected>Gender</option>
                   <option>Male</option>
                   <option>Female</option>

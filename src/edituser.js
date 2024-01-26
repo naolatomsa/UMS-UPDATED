@@ -8,8 +8,9 @@ import './edituser.css';
 import TopBar from './Topbar';
 import { useAuth } from './Auth-context';
 import axios from 'axios';
-// import { useNavigate } from 'react-router-dom';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+
 function Edit(){
     const authInfo = useAuth();
     const [Username, setUserName] = useState('');
@@ -20,9 +21,7 @@ function Edit(){
     const [userActivities, setUserActivities] = useState([]);
     const navigate = useNavigate();
 
-    const handleBack=()=>{
-        navigate('/Admin Dashbord')
-    }
+
     //admin fetch user's data using their Id
     useEffect(() => {
         // Fetch user data when the component mounts
@@ -68,7 +67,7 @@ function Edit(){
         <div className='tolbar1'><TopBar /*name={authInfo.user.name}*/ imageSrc={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"} /></div>
         <div className='adminedituserpage'>
         < div className='userpage'>
-               <a onClick={handleBack} style={{margin:'0', height:'47px'}}> <img src={process.env.PUBLIC_URL + '/Icons/back.png'} style={{ width: '26px', height: '26px', marginTop:'20px' }} alt='Back' /></a>
+               <a onClick={()=>navigate('/Admin Dashbord')} style={{margin:'0', height:'47px'}}> <img src={process.env.PUBLIC_URL + '/Icons/back.png'} style={{ width: '26px', height: '26px', marginTop:'20px' }} alt='Back' /></a>
 
             <div className="card">
             <div className="card1">

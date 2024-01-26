@@ -3,6 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import './login.css';
+import bcrypt from 'bcryptjs';
 
 // const usernameRegex = /^[a-zA-Z][a-zA-Z0-9_]{2,19}$/;
 // const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
@@ -26,6 +27,10 @@ function Login() {
     
   };
 
+  const saltRounds = 10;
+  const hashedPassword = bcrypt.hash(Password, saltRounds);
+  const hashedConfirmPassword = bcrypt.hash(ConfirmPassword, saltRounds);
+
   const handleForget = () => {
     navigate('./forget')
   }
@@ -42,8 +47,8 @@ function Login() {
       }
   
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/signup/', {
-          Username,Email, Password, ConfirmPassword
+        const response = await axios.post('http://192.168.0.105:8000/api/signup/', {
+          Username,Email, hashedPassword, hashedConfirmPassword 
         });
 
         const {access} = response.data
@@ -72,9 +77,9 @@ function Login() {
     const handleLogin = async (e) => {
       e.preventDefault()
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/login', {
+        const response = await axios.post('http://192.168.0.105:8000/api/login', {
           Username,
-          Password,
+          hashedPassword,
         });
 
 

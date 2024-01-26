@@ -4,8 +4,8 @@ import { createBrowserRouter,RouterProvider } from 'react-router-dom';
 
 
 import Login from "./login";
-import View from './Activity';
-import Gule from './userpage';
+// import View from './Activity';
+// import Gule from './userpage';
 import Naol from './adminDashbord';
 import SetAcount from './setacount';
 // import AdminProfile from './adminProfile';
@@ -36,40 +36,40 @@ const router = createBrowserRouter([
 
   {
     path: "/Admin Dashbord",
-    element: <Naol />,
+    element: access && userRole==='Admin'? <Naol />: <login/>,
   },
   {
     path: "/adduser",
-    element: <AdminAdduser />,
+    element: access && userRole==='Admin'? <AdminAdduser /> : <login/>,
   },
-  {
-    path: "/userhome",
-    element: <Gule />,
-  },
-  {
-    path: "/viewactivity",
-    element: <View />,
-  },
+  // {
+  //   path: "/userhome",
+  //   element: <Gule />,
+  // },
+  // {
+  //   path: "/viewactivity",
+  //   element: <View />,
+  // },
   {
     path: "/setaccount",
     element: <SetAcount />,
   },
   {
     path: "/edituser/:userId",
-    element: <Edit />,
+    element: access && userRole==='Admin'? <Edit />: <login/>,
   },
   {
     path: "/userpro",
-    element: <UserDashboard /> ,
+    element: access && userRole==='normal_users'? <UserDashboard />: <login /> ,
   },
   {
     path: "/updatepro",
-    element: <UserUpdateProfile />,
+    element: access && userRole==='normal_users'? <UserUpdateProfile />: <login />,
   },
   
   {
     path: "/adminpro",
-    element: <ProfileOfAdmin /> ,
+    element: access && userRole==='Admin'? <ProfileOfAdmin />: <login/> ,
   },
   {
     path: "/forget",

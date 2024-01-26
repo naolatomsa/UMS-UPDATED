@@ -5,10 +5,12 @@ import axios from 'axios'
 import './edituser.css'
 // import { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 
 
 function AdminAdduser(){
 
+  // const { userId } = useParams();
   const navigate = useNavigate();
   const [location, setLocation] = useState('');
   const [countries, setCountries] = useState([]);
@@ -48,7 +50,8 @@ function AdminAdduser(){
       const handleAdduser = async (e)=>{
         e.preventDefault();
         try{
-          const response = await axios.post("http://192.168.0.107:8000/api/addnew_user", {
+          const response = await axios.post("http://192.168.0.105:8000/api/addnew_user", {
+
             firstName, lastName, Password, ConfirmPassword, Location, phone, Username, gender
           })
           console(response.data)
@@ -75,53 +78,50 @@ function AdminAdduser(){
         <div className='input2'>
         <input type="text" placeholder="last name" required value={lastName} onChange={(e) => setLastName(e.target.value)}/>
         </div>
-        <div className='input1' style={{width:'300px', border: 'solid 1px #38A899 '}} >
-          <label htmlFor="gender">Gender:<br></br></label>
-        <select id="gender" name="gender" value={gender} onChange={(e)=> setGender(e.target.value)}>
-            <option value="male" >Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-        </select>
-          </div>
+          <div className="gender" style={{marginTop:'7.5px'}}>
+              <label>
+                <select value={gender} onChange={(e)=>setGender(e.target.value)}>
+                      <option value="" disabled selected>Gender</option>
+                      <option>Male</option>
+                      <option>Female</option>
+                  </select>
+              </label>
+            </div>
             <div className='input3'>
             <input type='tel' placeholder='phone' required value={phone} onChange={(e)=> setPhone(e.target.value)}/>
             </div>
             {/* <div className='input3'>
             <input type='email' placeholder='Email' required value={Email} onChange={(e)=> setEmail(e.target.value)}/>
             </div> */}
-            <div className='input-containeradduser'>
-              <div className='inputcountry'>
-                <input
-                  type='text'
-                  placeholder='Location'
+              <div className='inputcountry gender' style={{marginTop:'7.5px'}} >
+                <select
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                />
-                <span className='icon' style={{cursor: 'pointer'}}onClick={handleIconClick}>
-                  &#x25BC;
-                </span>
-              </div>
-              {showCountriesList && (
-                <select  style={{width: '50px'}}
-                  className='countries-list'
-                  onChange={(e) =>
-                    handleCountryChange(
-                      countries.find((country) => country.name === e.target.value)
-                    )
-                  }
                 >
-                  {countries
-                    .filter((country) =>
-                      country.name.toLowerCase().includes(location.toLowerCase())
-                    )
-                    .map((country) => (
-                      <option key={country.alpha3Code} value={country.name}>
-                        {country.name}
-                      </option>
-                    ))}
+                  <option value='' disabled>Select Location</option>
+                  {countries.map((country) => (
+                    <option key={country.alpha2Code} value={country.name}>
+                      {country.name}
+                    </option>
+                  ))}
                 </select>
-              )}
-            </div>
+                {/* <span className='icon' style={{ cursor: 'pointer' }} onClick={handleIconClick}>
+                  &#x25BC;
+                </span> */}
+
+                {showCountriesList && (
+                  <div>
+                    {/* Display the list of countries as needed */}
+                    <ul>
+                      {countries.map((country) => (
+                        <li key={country.alpha2Code} onClick={() => handleCountryChange(country)}>
+                          {country.name}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
 
             <div className='input2'>
             <input type='content' placeholder='user name' required value={Username} onChange={(e) => setUserName(e.target.value)}/>
