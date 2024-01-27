@@ -5,12 +5,14 @@ import axios from 'axios'
 import './edituser.css'
 // import { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './Auth-context';
 // import { useParams } from 'react-router-dom';
 
 
 function AdminAdduser(){
 
   // const { userId } = useParams();
+  const authInfo = useAuth();
   const navigate = useNavigate();
   const [ Username, setUsername] = useState("");
   const [Email, setEmail] = useState("");
@@ -21,7 +23,7 @@ function AdminAdduser(){
         e.preventDefault();
         if(Password===ConfirmPassword){
           try{
-            const response = await axios.post("http://192.168.0.105:8000/api/signup/", {
+            const response = await axios.post("http://127.0.0.1:8000/api/signup/", {
               Email, Password, ConfirmPassword, Username
             })
             // console(response.data)
@@ -40,8 +42,11 @@ function AdminAdduser(){
 
 
   return (
-    <div className='Add-user'>
-        <TopBar /*name={authInfo.user.name}*/ imageSrc={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"}/>
+    <>
+    {
+      authInfo? 
+      <div className='Add-user'>
+        <TopBar name= {authInfo.user.username} imageSrc={authInfo.user.image}/>
         <a onClick={()=>navigate('/Admin Dashbord')}><img src={process.env.PUBLIC_URL + '/Icons/back.png'} style={{ width: '26px', height: '26px', marginLeft:'100px' }} alt='Back' /></a>
         <div className='form-container adduser'>
         <form className='form editform' style={{height:"500px"}} onSubmit={handleAdduser}>
@@ -84,6 +89,10 @@ function AdminAdduser(){
         {/* <View /> */}
         </div>
     </div>
+    :
+    <h1>Loading...</h1>
+    }
+    </>
   )
 }
 

@@ -13,7 +13,7 @@ const AuthProvider = ({ children }) => {
     if (token) {
       const fetchData = async () => {
         try {
-          const response = await axios.get('http://192.168.0.105:8000/api/user_profile', {
+          const response = await axios.get('http://127.0.0.1:8000/api/user_profile', {
             headers: {
               Authorization: `Bearer ${token}`,
             },

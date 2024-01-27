@@ -17,7 +17,7 @@ const Changepassword = () => {
     e.preventDefault();
 
     try{
-      const response = await axios.post('http://192.168.0.105:8000/reset_password', { 
+      const response = await axios.post('http://127.0.0.1:8000/api/reset_password', { 
         token, userId, newPassword , confirmNewPassword
       })
       console.log('sent secussfilly now login', response)

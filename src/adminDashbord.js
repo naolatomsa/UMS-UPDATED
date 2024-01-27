@@ -18,17 +18,18 @@ function Naol() {
   const navigate = useNavigate();
   // const [item, setItem] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-console.log(search)
+  console.log(search)
   //Fetch User Data
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://192.168.0.105:8000/api/user_list');
+        const response = await axios.get('http://127.0.0.1:8000/api/user_list');
         const responseData = response.data;
         if (Array.isArray(responseData)) {
           setData(responseData.map(user => ({ ...user, status: true })));
         // if (Array.isArray(responseData)) {
         //   setData(responseData);
+        console.log(response.data);
         } else {
           console.error('Fetched data is not an array:', responseData);
           setData([]);
@@ -61,7 +62,7 @@ console.log(search)
 
     alert('are you sure')
     try {
-      const response = await axios.get(`http://192.168.0.105:8000/api/deactivate_user/${userId}`);
+      const response = await axios.get(`http://127.0.0.1:8000/api/deactivate_user/${userId}`);
       console.log('User deactivated successfully!', response.data);
       
       // window.location.reload();
@@ -83,7 +84,7 @@ console.log(search)
  const handleDelete = async (userId) => {
     alert('are you sure')
     try {
-      const response = await axios.delete(`http://192.168.0.105:8000/api/delete_user/${userId}`);
+      const response = await axios.delete(`http://127.0.0.1:8000/api/delete_user/${userId}`);
       console.log('User deleted successfully!', response.data);
       window.location.reload();
       // setItem(prevItems => prevItems.filter(item => item.id !== userId));
@@ -98,7 +99,7 @@ console.log(search)
     <>
     {
       authInfo ?(    <div className="page">
-      <TopBar name={authInfo.user.username} imageSrc={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"}/>
+      <TopBar name={authInfo.user.username} imageSrc={authInfo.user.image}/>
       <div className="user-man">
         <p style={{
         color: 'black' , fontWeight:'bold'
@@ -149,17 +150,18 @@ console.log(search)
           <th>Action</th>
           </tr>
           </thead>
-          <tbody>
+          <tbody> 
           {data.filter((item)=>{
-            return search.toLocaleLowerCase()===''? item: item.username.
-            toLowerCase().includes(search) || item.email.
-            toLowerCase().includes(search);
-          }).map((item) => (
+            return search.toLocaleLowerCase()===''
+            ?item
+            :item.username.toLocaleLowerCase().includes(search);
+           }) 
+           .map((item)=>(
           <tr key={item.id}>
           <td><a onClick={()=> navigate(`/edituser/${item.id}`)}>{item.username}</a></td>
           <td>{item.email}</td>
           <td>{item.id}</td>
-          <td>$100</td>
+          <td>{item.email}</td>
           <td><a onClick={() => handleDeactivate(item.id)}>{item.is_active? (<img src={process.env.PUBLIC_URL + '/Icons/deactivate.jpg'} style={{ width: '25px', height: '25px' }} alt='Back' />):
           (<img src={process.env.PUBLIC_URL + '/Icons/activeuser.png'} style={{ width: '25px', height: '25px' }} alt='Back' />)}</a>
           <a onClick={() => handleDelete(item.id)}><img src={process.env.PUBLIC_URL + '/Icons/delete.jpg'} style={{ width: '20px', height: '20px' }} alt='Back' /></a></td>

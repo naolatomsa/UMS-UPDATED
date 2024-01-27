@@ -52,7 +52,7 @@ function SetAcount() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://192.168.0.105:8000/api/update_profile',
+        'http://127.0.0.1:8000/api/update_profile',
         {
           firstName, lastName, gender, phone, date, location, image,
         },

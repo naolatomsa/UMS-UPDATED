@@ -7,6 +7,8 @@ import './edituser.css'
 import IMG from './img';
 import './topbar.css'
 import { useAuth } from './Auth-context';
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 const access = localStorage.getItem('access')
 // console.log(access)
@@ -46,7 +48,7 @@ const UserUpdateProfile = () => {
     const handleUserUpdateProfile = async(e) => {
       e.preventDefault();
       try {
-        const response = await axios.post('http://192.168.0.105:8000/api/update_profile',
+        const response = await axios.post('http://127.0.0.1:8000/api/update_profile',
           { 
             firstName, lastName, location, phone, gender, email, 
           },
@@ -65,7 +67,7 @@ const UserUpdateProfile = () => {
       }catch(error){
         // console.log(error);
       }
-
+      toastr.success('You are updated your profile successfully');
       setEmail("")
       setPhone("")
       setLocation("")
@@ -77,39 +79,42 @@ const UserUpdateProfile = () => {
     
   return (
     <>
-    <TopBar /*name={authInfo.user.name}*/ imageSrc={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"} />
-    <div className="card auserboard">
+    {
+      authInfo?
+      <><TopBar name={authInfo.user.username} imageSrc={authInfo.user.image} /><div className="card auserboard">
 
 
-          <div className="wrapper userprofile" style={{height:'50px'}}>
-            <a onClick={()=>navigate('/userpro')} className="third after" style={{fontSize:'17px'}}>My profile</a>
-            <a className='third after' style={{fontSize:'17px'}}>Update profile</a>
-         </div>
-      <IMG imgName={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"} 
-            size={'100px'} style={{ backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/addphoto.png')`, backgroundSize: '20px 20px', 
-            backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px' }}/>
-        <form className='editform' onSubmit={handleUserUpdateProfile}>
-       
-        <div className='input3'>
-            <input type='text' placeholder='first name' required value={firstName} onChange={(e)=>setFirstName(e.target.value)}/>
+            <div className="wrapper userprofile" style={{ height: '50px' }}>
+              <a onClick={() => navigate('/userpro')} className="third after" style={{ fontSize: '17px' }}>My profile</a>
+              <a className='third after' style={{ fontSize: '17px' }}>Update profile</a>
             </div>
-        <div className='input2'>
-        <input type="text" placeholder="last name" required value={lastName} onChange={(e)=>setLastName(e.target.value)}/>
-        </div>
-   
-        <div className="gender" style={{marginTop:'7.5px'}}>
-          <label>
-            <select value={gender} onChange={(e)=>setGender(e.target.value)}>
-                  <option value="" disabled selected>Gender</option>
-                  <option>Male</option>
-                  <option>Female</option>
-              </select>
-          </label>
-        </div>
-            <div className='input3'>
-            <input type='tel' placeholder='phone' required value={phone} onChange={(e)=>setPhone(e.target.value)}/>
-            </div>
-            <div className='inputcountry gender' style={{marginTop:'7.5px'}} >
+            <IMG imgName={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"}
+              size={'100px'} style={{
+                backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/addphoto.png')`, backgroundSize: '20px 20px',
+                backgroundRepeat: 'no-repeat', backgroundPosition: 'left 10px center', paddingLeft: '50px'
+              }} />
+            <form className='editform' onSubmit={handleUserUpdateProfile}>
+
+              <div className='input3'>
+                <input type='text' placeholder='first name' required value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+              </div>
+              <div className='input2'>
+                <input type="text" placeholder="last name" required value={lastName} onChange={(e) => setLastName(e.target.value)} />
+              </div>
+
+              <div className="gender" style={{ marginTop: '7.5px' }}>
+                <label>
+                  <select value={gender} onChange={(e) => setGender(e.target.value)}>
+                    <option value="" disabled selected>Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                  </select>
+                </label>
+              </div>
+              <div className='input3'>
+                <input type='tel' placeholder='phone' required value={phone} onChange={(e) => setPhone(e.target.value)} />
+              </div>
+              <div className='inputcountry gender' style={{ marginTop: '7.5px' }}>
                 <select
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
@@ -136,15 +141,17 @@ const UserUpdateProfile = () => {
                 )}
               </div>
 
-            <div className='input2'>
-            <input type='email' placeholder='email' required value={email} onChange={(e)=>setEmail(e.target.value)}/>
-            </div>
-            <div className='input6' style={{gridColumn: '-3 / -1', paddingLeft:'240px'}}>
-            <button type='submit'>Update</button>
-            </div>
-        </form>
+              <div className='input2'>
+                <input type='email' placeholder='email' required value={email} onChange={(e) => setEmail(e.target.value)} />
+              </div>
+              <div className='input6' style={{ gridColumn: '-3 / -1', paddingLeft: '240px' }}>
+                <button type='submit'>Update</button>
+              </div>
+            </form>
 
-    </div>
+          </div></>:
+    <h1>Loading..</h1>
+    }
     </>
   )
 }

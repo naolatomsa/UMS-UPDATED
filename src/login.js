@@ -3,6 +3,9 @@ import { useState } from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import './login.css';
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css'; // Import the Toastr CSS
+
 // import bcrypt from 'bcryptjs';
 
 // const usernameRegex = /^[a-zA-Z][a-zA-Z0-9_]{2,19}$/;
@@ -45,12 +48,13 @@ function Login() {
         return;
       }
       if (Password !== ConfirmPassword) {
-        console.error('Passwords do not match.');
+        // console.error('Passwords do not match.');
+        toastr.warning('password doesn`t match')
         return;
       }
   
       try {
-        const response = await axios.post('http://192.168.0.105:8000/api/signup/', {
+        const response = await axios.post('http://127.0.0.1:8000/api/signup/', {
           Username,Email, Password, ConfirmPassword 
         });
 
@@ -59,16 +63,16 @@ function Login() {
         const {userRole} = response.data
   
         console.log('Form data sent successfully!', response.data);
-  
+       
         navigate('/setaccount')
-
+        toastr.success('You have signed up successfully. Now you can finish your account setup or skip and finish later!');
+    
         localStorage.setItem('access', access);
         localStorage.setItem('refresh', refresh);
         localStorage.setItem('userRole', userRole);
       } 
       catch (error) {
-        console.error('empty', error);
-        setError("Empty form")
+        
       }
 
     };
@@ -79,8 +83,9 @@ function Login() {
 
     const handleLogin = async (e) => {
       e.preventDefault()
+
       try {
-        const response = await axios.post('http://192.168.0.105:8000/api/login', {
+        const response = await axios.post('http://127.0.0.1:8000/api/login', {
           Username,
           Password,
         });
@@ -90,11 +95,14 @@ function Login() {
         const {refresh} = response.data
         const {userRole} = response.data
         if (userRole==="Admin"){
+          toastr.success('Logged in seccusfly');
           navigate('/adminpro')
+          // window.location.reload()
         }
 
         else{
           navigate('/userpro')
+          toastr.success('Logged in seccusfly');
         }
         
   
@@ -103,8 +111,11 @@ function Login() {
         localStorage.setItem('userRole', userRole);
 
       } catch (error) {
-        console.error('Empty form', error);
-        setError('Empty form');
+        toastr.error('Invalid Credential or user doesnot exist')
+
+        
+        // console.error('Empty form', error);
+        // setError('Empty form');
       }
     };
 

@@ -27,11 +27,11 @@ function Edit(){
         // Fetch user data when the component mounts
         const fetchData = async () => {
         try {
-            const response = await axios.get(`http://192.168.0.105:8000/api/user_profile_by_admin/${userId}`);
+            const response = await axios.get(`http://127.0.0.1:8000/api/user_profile_by_admin/${userId}`);
             setUserData(response.data);
 
 
-            const activitiesResponse = await axios.get(`http://192.168.0.105:8000/api/get_user_activity/${userId}`);
+            const activitiesResponse = await axios.get(`http://127.0.0.1:8000/api/get_user_activity/${userId}`);
             setUserActivities(activitiesResponse.data); 
             console.log(userActivities)
 
@@ -51,7 +51,7 @@ function Edit(){
     const handleEdituser = async(e)=>{
         e.preventDefault();
         try{
-            const response = await axios.put(`http://192.168.0.105:8000/api/user_profile_by_admin/${userId}`,{
+            const response = await axios.put(`http://127.0.0.1:8000/api/user_profile_by_admin/${userId}`,{
                 Username, Password, confirmPassword, Email
             });
             console.log("Edited seccusfly", response.data)
