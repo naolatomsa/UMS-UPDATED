@@ -7,7 +7,7 @@ import './login.css';
 // import { upload } from '@testing-library/user-event/dist/upload';
 
 const token = localStorage.getItem('access')
-console.log(token)
+// console.log(token)
 function SetAcount() {
   const [save, setSave] = useState('Save Changes');
   // const [clear, setClear] = useState('false');

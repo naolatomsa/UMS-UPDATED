@@ -109,6 +109,7 @@
     font-family: sans-serif;
     padding: 20px 20px;
     text-transform: uppercase;
+    cursor: pointer;
   }
   .Buttons{
     display: flex;

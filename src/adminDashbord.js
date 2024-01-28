@@ -12,13 +12,17 @@ const access = localStorage.getItem('access')
 function Naol() {
   const authInfo = useAuth();
   const [data, setData] = useState([]);
+
   const [search, setSearch] = useState('');
+  const [filterRole, setFilterRole] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
+
   const [role, setRole] = useState('');
   // const [status, setStatus] = useState(['true'])
   const navigate = useNavigate();
   // const [item, setItem] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  console.log(search)
+  // console.log(search)
   //Fetch User Data
   useEffect(() => {
     const fetchData = async () => {
@@ -29,13 +33,13 @@ function Naol() {
           setData(responseData.map(user => ({ ...user, status: true })));
         // if (Array.isArray(responseData)) {
         //   setData(responseData);
-        console.log(response.data);
+        // console.log(response.data);
         } else {
           console.error('Fetched data is not an array:', responseData);
           setData([]);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        // console.error('Error fetching data:', error);
         setData([]);
       }
     };
@@ -99,7 +103,7 @@ function Naol() {
     <>
     {
       authInfo ?(    <div className="page">
-      <TopBar name={authInfo.user.username} imageSrc={authInfo.user.image}/>
+      <TopBar name={authInfo.user.first_name} fname={authInfo.user.last_name} imageSrc={authInfo.user.userprofile.photo}/>
       <div className="user-man">
         <p style={{
         color: 'black' , fontWeight:'bold'
@@ -113,8 +117,8 @@ function Naol() {
       }}> UMS</p>
             <div className="selectdiv">
           <label>
-              <select>
-                  <option value="" disabled>Status</option>
+              <select value={filterStatus} onChange={(e)=>setFilterStatus(e.target.value)}>
+                  <option value=''>Status</option>
                   <option>Active</option>
                   <option>Inactive</option>
               </select>
@@ -122,8 +126,8 @@ function Naol() {
         </div>
         <div className="selectdiv">
           <label>
-              <select>
-                  <option value="" disabled>Role</option>
+              <select value={filterRole} onChange={(e) => setFilterRole(e.target.value)}>
+                  <option value=''>Role</option>
                   <option>Admin</option>
                   <option>User</option>
               </select>
@@ -152,16 +156,26 @@ function Naol() {
           </thead>
           <tbody> 
           {data.filter((item)=>{
-            return search.toLocaleLowerCase()===''
-            ?item
-            :item.username.toLocaleLowerCase().includes(search);
+            const usernameMatch = item.username.toLowerCase().includes(search.toLowerCase());
+
+            // Filter by role
+            const roleMatch = item.groups === 1 && filterRole === 'Admin' ||
+                              item.groups !== 1 && filterRole === 'User' ||
+                              filterRole === '';
+      
+            // Filter by status
+            const statusMatch = item.is_active && filterStatus === 'Active' ||
+                                !item.is_active && filterStatus === 'Inactive' ||
+                                filterStatus === '';
+      
+            return usernameMatch && roleMatch && statusMatch;
            }) 
            .map((item)=>(
           <tr key={item.id}>
           <td><a onClick={()=> navigate(`/edituser/${item.id}`)}>{item.username}</a></td>
           <td>{item.email}</td>
-          <td>{item.id}</td>
-          <td>{item.email}</td>
+          <td>{item.groups==1?'Admin':'User'}</td>
+          <td>{item.is_active? 'Active':'Inactive'}</td>
           <td><a onClick={() => handleDeactivate(item.id)}>{item.is_active? (<img src={process.env.PUBLIC_URL + '/Icons/deactivate.jpg'} style={{ width: '25px', height: '25px' }} alt='Back' />):
           (<img src={process.env.PUBLIC_URL + '/Icons/activeuser.png'} style={{ width: '25px', height: '25px' }} alt='Back' />)}</a>
           <a onClick={() => handleDelete(item.id)}><img src={process.env.PUBLIC_URL + '/Icons/delete.jpg'} style={{ width: '20px', height: '20px' }} alt='Back' /></a></td>

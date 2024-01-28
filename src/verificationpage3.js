@@ -31,9 +31,8 @@ const Verificationpage3= () => {
         {/* <div className='input1'>
           <p style={{color:'black'}}>Enter your email for the verification process, we will send 4 digits code to your email.</p>
         </div> */}
-        <p style={{color:'black',fontSize:'17px'}}>We've emailed you instructions for setting your password,<br></br> 
-        if an account exists with the email you entered. <br></br>
-        You should receive them shortly.</p>
+        <p style={{color:'black',fontSize:'17px'}}>We've emailed you instructions for setting your password,
+        </p>
         {/* <div className='input2'>
           <input type='password' placeholder='password' required />
         </div> */}
@@ -41,9 +40,7 @@ const Verificationpage3= () => {
           <input type='text' placeholder='paste here' required/>
         </div> */}
         {/* <button style={{marginTop: '30px'}}>Continue</button> */}
-        <p style={{color:'black',fontSize:'17px'}}>If you don't receive an email,
-        please make sure you’ve <br></br> entered the address you registered with, <br></br>
-        and check your spam folder. Or <a style={{fontSize:'17px'}} onClick={handleBack}> Enter Your Email Again</a></p>
+        <p style={{color:'black',fontSize:'17px'}}>If you don't receive an email,<a style={{fontSize:'17px'}} onClick={handleBack}>Click Here</a></p>
         {/* <p style={{color:'black'}}>If you didn’t receive a code! <a style={{color:'#38A899'}}>Resend</a></p> */}
       </form>
     </div>

@@ -9,6 +9,7 @@ import View from './Activity';
 function AdminProfile(){
 
     const [userInfo, setUserInfo] = useState('nameher');
+    
     useEffect(() => {
       const access = localStorage.getItem('access')
   

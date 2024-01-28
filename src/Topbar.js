@@ -6,7 +6,9 @@ import { useNavigate } from "react-router-dom";
 // import { useAuth } from "./Auth-context";
 function TopBar(props) {
   const name = props.name;
+  const fname = props.fname;
   const imageSrc = props.imageSrc;
+  const message = props.message;
   const navigate = useNavigate();
   // const [userInfo, setUserInfo] = useState(useAuth)
   
@@ -16,6 +18,7 @@ function TopBar(props) {
   const handleLogout = () => {
     try{
     localStorage.removeItem('access');
+    localStorage.removeItem('refresh');
     localStorage.removeItem('userRole');
 
     navigate('/');
@@ -29,10 +32,11 @@ function TopBar(props) {
      <img src={process.env.PUBLIC_URL + '/Icons/top icon.png'} style={{ width: '26px', height: '26px' }} alt='Back'  className="topicon"/>
      <p className="Iconname">UMS</p>
     
-      <p className="topbarname" style={{color:'white'}}>{name}</p>
+      <p className="topbarname" style={{color:'white'}}>{name} {fname}</p>
       <div className="left">
       <IMG style={{justfiyself:'start'}} imgName={imageSrc} 
         size={'25px'}/>
+        {/* <h6>{message}</h6> */}
         <button className='logout' onClick={handleLogout} style={{borderRadius:'10px',cursor:'pointer'}}> logout</button>
         </div>
  

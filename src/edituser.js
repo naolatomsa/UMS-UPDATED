@@ -29,11 +29,13 @@ function Edit(){
         try {
             const response = await axios.get(`http://127.0.0.1:8000/api/user_profile_by_admin/${userId}`);
             setUserData(response.data);
+            
+            // console.log(response.data)
 
 
             const activitiesResponse = await axios.get(`http://127.0.0.1:8000/api/get_user_activity/${userId}`);
             setUserActivities(activitiesResponse.data); 
-            console.log(userActivities)
+            // console.log(userActivities)
 
         } catch (error) {
             // console.error('Error fetching user data:', error);
@@ -51,10 +53,11 @@ function Edit(){
     const handleEdituser = async(e)=>{
         e.preventDefault();
         try{
-            const response = await axios.put(`http://127.0.0.1:8000/api/user_profile_by_admin/${userId}`,{
+            const response = await axios.s(`http://127.0.0.1:8000/api/user_profile_by_admin/${userId}`,{
                 Username, Password, confirmPassword, Email
-            });
-            console.log("Edited seccusfly", response.data)
+            }
+            );
+            // console.log("Edited succesfully", response.data)
         }catch(error){
 
         }
@@ -64,36 +67,39 @@ function Edit(){
 
 
     return(
+        
 
-        <> 
-        <div className='tolbar1'><TopBar /*name={authInfo.user.name}*/ imageSrc={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"} /></div>
+        <>
+        {
+         authInfo ? ( <>
+           <div className='tolbar1'><TopBar name={authInfo.user.first_name}  fname={authInfo.user.last_name} /*imageSrc={userData.userprofile.photo}*/ /></div>
         <div className='adminedituserpage'>
         < div className='userpage'>
                <a onClick={()=>navigate('/Admin Dashbord')} style={{margin:'0', height:'47px'}}> <img src={process.env.PUBLIC_URL + '/Icons/back.png'} style={{ width: '26px', height: '26px', marginTop:'20px' }} alt='Back' /></a>
 
             <div className="card">
             <div className="card1">
-            <IMG imgName={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"} 
+            <IMG /*imgName={userData.userprofile.photo} */
             size={'100px'}/>
             <div className="card__text">
                 
-                <h2>{userData.username}</h2>
-                <p style={{color: 'black'}}>{userData.location}</p>
-                <p style={{color: 'black'}}>Addis Ababa</p>
+                <h2>{userData.first_name} {userData.last_name}</h2>
+                <p style={{color: 'black'}}>-</p>
+                {/* <p style={{color: 'black'}}>Addis Ababa</p> */}
             </div>
             </div>
             <ul className="card2">
             <li>
             <img src={process.env.PUBLIC_URL + '/Icons/name.png'} style={{ width: '15px', height: '15px',marginRight:'10px', marginTop:'20px' }} alt='Back'  className="topicon"/>
-                <span>{userData.role}</span>
+                <span>{userData.groups===1?'Admin':'User'}</span>
             </li>
             <li>
             <img src={process.env.PUBLIC_URL + '/Icons/active.png'} style={{ width: '15px', height: '15px',marginRight:'10px', marginTop:'20px' }} alt='Back'  className="topicon"/>
-                <span>{userData.status}</span>
+                <span>{userData.is_active==true?'Active':'Inactive'}</span>
             </li>
             <li>
             <img src={process.env.PUBLIC_URL + '/Icons/men.png'} style={{ width: '15px', height: '15px',marginRight:'10px', marginTop:'20px' }} alt='Back'  className="topicon"/>
-                <span>{userData.gender}</span>
+                <span>-</span>
             </li>
             </ul>
             <ul className="card3">
@@ -103,7 +109,7 @@ function Edit(){
             </li>
             <li>
             <img src={process.env.PUBLIC_URL + '/Icons/phone.png'} style={{ width: '15px', height: '15px',marginRight:'10px', marginTop:'20px' }} alt='Back'  className="topicon"/>
-                <span>{userData.phone}</span>
+                <span>-</span>
             </li>
             </ul>
         </div>
@@ -146,9 +152,8 @@ function Edit(){
             <tbody>
                 {userActivities && userActivities.map((activity) => (
                 <tr key={activity.id}>
-                    <td className="col1">{activity.date_time}</td>
-                    <td className="col2">{activity.activities}</td>
-                    {console.log(activity.is_login)}
+                    <td className="col1">{new Date(activity.date_time).toLocaleString()}</td>
+                    <td className="col2">{activity.is_login?'loged in':'logged out'}</td>
                 </tr>
                 ))}
             </tbody>
@@ -156,8 +161,14 @@ function Edit(){
         </div>
         </div>
     </div>
-    </div>
-        </>
-    );
-}
+    </div> 
+         </>):(
+     
+           <h1>Loading ...</h1>
+         )
+        }
+       </>
+         );
+     }
+
 export default Edit;

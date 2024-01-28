@@ -7,7 +7,8 @@ import './edituser.css'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './Auth-context';
 // import { useParams } from 'react-router-dom';
-
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 function AdminAdduser(){
 
@@ -27,8 +28,14 @@ function AdminAdduser(){
               Email, Password, ConfirmPassword, Username
             })
             // console(response.data)
-            console.log(response.data, "added seccusfully")
-            navigate("/Admin Dashbord")
+            // console.log(response.data, "added seccusfully")
+            toastr.success("You have Added new user Succesfully")
+            // navigate("/Admin Dashbord")
+            setConfirmPassword("")
+            setPassword("")
+            setEmail("")
+            setUsername("")
+           
   
           } catch(error){
             // console.error(error);
@@ -36,6 +43,9 @@ function AdminAdduser(){
   
           }
 
+        }
+        else{
+          toastr.warning("Password Doesn`t match")
         }
 
       }

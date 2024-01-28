@@ -41,42 +41,55 @@ function Login() {
     navigate('./forget')
   }
   const handleSignup = async (e) => {
-      e.preventDefault();
+    e.preventDefault();
   
-      if (!Username.trim() || !Password.trim() || !Email.trim() || !ConfirmPassword.trim()) {
-        console.error('All fields are required.');
-        return;
-      }
-      if (Password !== ConfirmPassword) {
-        // console.error('Passwords do not match.');
-        toastr.warning('password doesn`t match')
-        return;
-      }
+    if (!Username.trim() || !Password.trim() || !Email.trim() || !ConfirmPassword.trim()) {
+      console.error('All fields are required.');
+      return;
+    }
+    if (Password !== ConfirmPassword) {
+      toastr.warning('Passwords do not match');
+      return;
+    }
   
-      try {
-        const response = await axios.post('http://127.0.0.1:8000/api/signup/', {
-          Username,Email, Password, ConfirmPassword 
-        });
-
-        const {access} = response.data
-        const {refresh} = response.data
-        const {userRole} = response.data
+    // Regular expressions for validation
+    const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
   
-        console.log('Form data sent successfully!', response.data);
-       
-        navigate('/setaccount')
-        toastr.success('You have signed up successfully. Now you can finish your account setup or skip and finish later!');
-    
-        localStorage.setItem('access', access);
-        localStorage.setItem('refresh', refresh);
-        localStorage.setItem('userRole', userRole);
-      } 
-      catch (error) {
-        
-      }
-
-    };
-
+    if (!usernameRegex.test(Username)) {
+      toastr.warning('Invalid username format');
+      return;
+    }
+  
+    if (!emailRegex.test(Email)) {
+      toastr.warning('Invalid email format');
+      return;
+    }
+  
+    if (!passwordRegex.test(Password)) {
+      toastr.warning('Your password length must be 8 characters and above, it must contain at least one lowercase, one uppercase, one digit.  ');
+      return;
+    }
+  
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/signup/', {
+        Username, Email, Password, ConfirmPassword
+      });
+  
+      const { access, refresh, userRole } = response.data;
+  
+  
+      navigate('/setaccount');
+      toastr.success('You have signed up successfully. Now you can finish your account setup or skip and finish later!');
+  
+      localStorage.setItem('access', access);
+      localStorage.setItem('refresh', refresh);
+      localStorage.setItem('userRole', userRole);
+    } catch (error) {
+      // Handle error
+    }
+  };
 
     //login
 
@@ -95,9 +108,10 @@ function Login() {
         const {refresh} = response.data
         const {userRole} = response.data
         if (userRole==="Admin"){
-          toastr.success('Logged in seccusfly');
+          
           navigate('/adminpro')
-          // window.location.reload()
+          toastr.success('Logged in successfully');
+          window.location.reload()
         }
 
         else{

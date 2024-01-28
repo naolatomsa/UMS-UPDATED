@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import MyComponent from './TokenRefresher';
 
 
 import App from './App';
@@ -15,6 +16,7 @@ root.render(
     
     <AuthProvider>
       <App/>
+      <MyComponent />
     </AuthProvider>
   </React.StrictMode>
 );

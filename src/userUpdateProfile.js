@@ -16,7 +16,8 @@ const access = localStorage.getItem('access')
 const UserUpdateProfile = () => {
 
   const authInfo = useAuth();
-  const [location, setLocation] = useState('');
+  
+  const [location, setLocation] = useState();
   const [countries, setCountries] = useState([]);
   const [showCountriesList, setShowCountriesList] = useState(false);
   const [firstName, setFirstName] = useState('');
@@ -24,6 +25,24 @@ const UserUpdateProfile = () => {
   const [phone, setPhone] = useState('');
   const [gender, setGender] = useState('');
   const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    if (authInfo) {
+      if(authInfo.user.userprofile!=null){
+        setLocation(authInfo.user.userprofile.location);
+        setPhone(authInfo.user.userprofile.phone);
+        setGender(authInfo.user.userprofile.gender);
+
+      }
+      
+      setFirstName(authInfo.user.first_name);
+      setLastName(authInfo.user.last_name);
+    
+      setEmail(authInfo.user.email);
+    }
+  }, []);
+
+
   const navigate = useNavigate()
   useEffect(() => {
     const fetchCountries = async () => {
@@ -58,7 +77,7 @@ const UserUpdateProfile = () => {
             },
           }
         );
-        console.log('profile Updated seccusfully!', response.data);
+        // console.log('profile Updated seccusfully!', response.data);
         // window.location.reload();
 
 
@@ -80,8 +99,9 @@ const UserUpdateProfile = () => {
   return (
     <>
     {
+           
       authInfo?
-      <><TopBar name={authInfo.user.username} imageSrc={authInfo.user.image} /><div className="card auserboard">
+      <><TopBar name={authInfo.user.first_name} fname={authInfo.user.last_name} imageSrc={authInfo.user.image} /><div className="card auserboard">
 
 
             <div className="wrapper userprofile" style={{ height: '50px' }}>
@@ -96,10 +116,10 @@ const UserUpdateProfile = () => {
             <form className='editform' onSubmit={handleUserUpdateProfile}>
 
               <div className='input3'>
-                <input type='text' placeholder='first name' required value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                <input type='text' placeholder='first name'  value={firstName} onChange={(e) => setFirstName(e.target.value)} />
               </div>
               <div className='input2'>
-                <input type="text" placeholder="last name" required value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                <input type="text" placeholder="last name"  value={lastName} onChange={(e) => setLastName(e.target.value)} />
               </div>
 
               <div className="gender" style={{ marginTop: '7.5px' }}>
@@ -112,7 +132,7 @@ const UserUpdateProfile = () => {
                 </label>
               </div>
               <div className='input3'>
-                <input type='tel' placeholder='phone' required value={phone} onChange={(e) => setPhone(e.target.value)} />
+                <input type='tel' placeholder='phone'  value={phone} onChange={(e) => setPhone(e.target.value)} />
               </div>
               <div className='inputcountry gender' style={{ marginTop: '7.5px' }}>
                 <select
@@ -142,7 +162,7 @@ const UserUpdateProfile = () => {
               </div>
 
               <div className='input2'>
-                <input type='email' placeholder='email' required value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input type='email' placeholder='email'  value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
               <div className='input6' style={{ gridColumn: '-3 / -1', paddingLeft: '240px' }}>
                 <button type='submit'>Update</button>
