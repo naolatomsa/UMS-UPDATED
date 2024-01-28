@@ -5,14 +5,12 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
-
 const Changepassword = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
   const { userId } = useParams();
   const { token } = useParams();
-  // const { userId} = useParams();
   const handleChangepassword = async(e) => {
     e.preventDefault();
 
@@ -28,10 +26,9 @@ const Changepassword = () => {
     
   };
   useEffect(() => {
-    // You can log or use the token here
-    console.log('userId from URL:', userId);
-    console.log('token from URL:', token);
-  }, [userId]);
+    // console.log('userId from URL:', userId);
+    // console.log('token from URL:', token);
+  }, []);
   return (
     <div className='all'>
     <div className='wow'>
@@ -53,9 +50,6 @@ const Changepassword = () => {
     <div className='form-container' style={{paddingBottom:'0'}}>
       <form className='form' onSubmit={handleChangepassword}>
         <h1 style={{color:'#36AE8B'}}>CREATE NEW PASSWORD</h1>
-        {/* <div className='input1'>
-          <p style={{color:'black'}}>Enter your email for the verification process, we will send 4 digits code to your email.</p>
-        </div> */}
         <div className='input2'>
           <input type='password' placeholder='New password' required value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} style={{ backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/password.png')`, backgroundSize: '20px 20px', 
                 backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px'}}/>

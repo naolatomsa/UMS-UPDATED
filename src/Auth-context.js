@@ -1,9 +1,7 @@
 import axios from 'axios';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-
 const AuthContext = createContext();
-// const access = localStorage.getItem('access')
 const AuthProvider = ({ children }) => {
   const [authInfo, setAuthInfo] = useState(null);
 
@@ -20,13 +18,11 @@ const AuthProvider = ({ children }) => {
           });
 
           const data = response.data;
-          // console.log(data)
 
           setAuthInfo({
              user: data,
              token: token,
           });
-          // console.log(user)
         } catch (error) {
           console.error('Error fetching user information:', error);
         }

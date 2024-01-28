@@ -5,7 +5,6 @@ function IMG(props) {
     const size=props.size;
   return (
     <>
-    {/* <p style={{color:'white'}}>Naol Atomsa</p> */}
     <img src={imgName} width={size} height={size} className="card__image"/>
     </>
   );

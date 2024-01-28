@@ -4,13 +4,7 @@ import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import './login.css';
 import toastr from 'toastr';
-import 'toastr/build/toastr.min.css'; // Import the Toastr CSS
-
-// import bcrypt from 'bcryptjs';
-
-// const usernameRegex = /^[a-zA-Z][a-zA-Z0-9_]{2,19}$/;
-// const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-
+import 'toastr/build/toastr.min.css';
 
 function Login() {
   const [action, setAction] = useState('Login');
@@ -80,14 +74,14 @@ function Login() {
       const { access, refresh, userRole } = response.data;
   
   
-      navigate('/setaccount');
+      navigate('/userpro');
+      window.location.reload();
       toastr.success('You have signed up successfully. Now you can finish your account setup or skip and finish later!');
   
       localStorage.setItem('access', access);
       localStorage.setItem('refresh', refresh);
       localStorage.setItem('userRole', userRole);
     } catch (error) {
-      // Handle error
     }
   };
 
@@ -109,14 +103,15 @@ function Login() {
         const {userRole} = response.data
         if (userRole==="Admin"){
           
-          navigate('/adminpro')
+          navigate('/Admin Dashbord')
           toastr.success('Logged in successfully');
           window.location.reload()
         }
 
         else{
           navigate('/userpro')
-          toastr.success('Logged in seccusfly');
+          toastr.success('Logged in successfully');
+          window.location.reload();
         }
         
   
@@ -128,8 +123,6 @@ function Login() {
         toastr.error('Invalid Credential or user doesnot exist')
 
         
-        // console.error('Empty form', error);
-        // setError('Empty form');
       }
     };
 
@@ -181,15 +174,7 @@ function Login() {
             <input type='password' required value={Password} onChange={(e)=>{setPassword(e.target.value)}} placeholder={error ? error : 'Password'}
         style={{ borderColor: error ? 'red' : '' , backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/password.png')`, backgroundSize: '20px 20px', 
         backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px'}}/>
-{/* 
-            {isValidPassword ? (
-                <p>Password is valid!</p>
-              ) : (
-                <p>
-                  Password must be at least 6 characters long and contain at least one
-                  lowercase letter, one uppercase letter, and one special character.
-                </p>
-              )} */}
+
           </div>
           {isSignUp && (
             <div className='input4'>
@@ -202,8 +187,7 @@ function Login() {
           {isSignUp ? (<button onClick={handleSignup}>{action}</button>):
            (<button type='submit' onClick={handleLogin}>{action}</button>)}
            {isSignUp ? '': (<a onClick={handleForget} style={{fontSize:'17px',color:'#38A899'}}>Forgot your password?</a>)}
-          {/* <a href='#'>{isSignUp ? '' : 'Forgot your password?'}</a> */}
-          {/* <a onClick={switchForm}> {isSignUp ? 'Login' : 'Sign Up'}</a> */}
+
           <p style={{ color: 'black',fontSize:'17px'}} >
             {isSignUp ? 'Already have an account?' : 'New user?'}
             <a onClick={switchForm} style={{fontSize:'17px', color:'#38A899'}}> {isSignUp ? 'Login' : 'Sign Up'}</a>

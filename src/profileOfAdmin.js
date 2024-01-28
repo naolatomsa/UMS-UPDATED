@@ -1,5 +1,4 @@
 import React from 'react'
-// import Gule from './userpage';
 import TopBar from './Topbar';
 import { useEffect, useState } from 'react';
 import {useNavigate} from 'react-router-dom';
@@ -12,11 +11,10 @@ import 'toastr/build/toastr.min.css';
 
 
 const access = localStorage.getItem('access')
-// console.log(access);
 
 const ProfileOfAdmin = () => {
   const authInfo = useAuth();
-  // console.log(authInfo)
+  console.log(authInfo)
   const [location, setLocation] = useState('');
   const [countries, setCountries] = useState([]);
   const [showCountriesList, setShowCountriesList] = useState(false);
@@ -26,6 +24,23 @@ const ProfileOfAdmin = () => {
   const [gender, setGender] = useState('');
   const [email, setEmail] = useState('');
   const navigate = useNavigate()
+
+
+  useEffect(() => {
+    if (authInfo) {
+      if(authInfo.user.userprofile!=null){
+        setLocation(authInfo.user.userprofile.location);
+        setPhone(authInfo.user.userprofile.phone);
+        setGender(authInfo.user.userprofile.gender);
+
+      }
+      
+      setFirstName(authInfo.user.first_name);
+      setLastName(authInfo.user.last_name);
+      setEmail(authInfo.user.email);
+    }
+  }, []);
+
     
     useEffect(() => {
         const fetchCountries = async () => {
@@ -33,7 +48,6 @@ const ProfileOfAdmin = () => {
             const response = await axios.get('https://restcountries.com/v2/all');
             setCountries(response.data);
           } catch (error) {
-            // console.error('Error fetching countries:', error);
           }
         };
     
@@ -62,13 +76,11 @@ const ProfileOfAdmin = () => {
           }
         );
 
-        console.log('profile Updated seccusfully!', response.data);
         window.location.reload();
         toastr.success("You updated your Profile succeessfully!")
 
 
       }catch(error){
-        // console.log(error);
       }
 
   
@@ -77,7 +89,7 @@ const ProfileOfAdmin = () => {
     <>
     {
       authInfo?
-    <><div className='tolbar1'><TopBar name={authInfo.user.first_name} fname={authInfo.user.last_name} imageSrc={authInfo.user.userprofile.photo}/></div><div className="adminpro">
+    <><div className='tolbar1'><TopBar  name={authInfo.user.first_name} fname={authInfo.user.last_name} imageSrc={authInfo.user.userprofile.photo}/></div><div className="adminpro">
             <div>
 
               <div className='userpage'>
@@ -91,13 +103,12 @@ const ProfileOfAdmin = () => {
 
                       <h2>{authInfo.user.first_name} {authInfo.user.last_name}</h2>
                       <p style={{ color: 'black' }}>{authInfo.user.userprofile.location}</p>
-                      {/* <p style={{color: 'black'}}>Addis Ababa</p> */}
                     </div>
                   </div>
                   <ul className="card2">
                     <li>
                       <img src={process.env.PUBLIC_URL + '/Icons/name.png'} style={{ width: '15px', height: '15px', marginRight: '10px', marginTop: '20px' }} alt='Back' className="topicon" />
-                      <span>{authInfo.user.first_name}</span>
+                      <span>{authInfo.user.groups[0]===1?'Admin':'User'}</span>
                     </li>
                     <li>
                       <img src={process.env.PUBLIC_URL + '/Icons/active.png'} style={{ width: '15px', height: '15px', marginRight: '10px', marginTop: '20px' }} alt='Back' className="topicon" />

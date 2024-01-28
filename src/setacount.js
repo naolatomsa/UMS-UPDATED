@@ -4,13 +4,12 @@ import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import IMG from './img';
 import './login.css';
-// import { upload } from '@testing-library/user-event/dist/upload';
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 const token = localStorage.getItem('access')
-// console.log(token)
 function SetAcount() {
   const [save, setSave] = useState('Save Changes');
-  // const [clear, setClear] = useState('false');
   const [lastName, setLastName] = useState('');
   const [firstName, setFirstName] = useState('');
   const [gender, setGender] = useState('');
@@ -65,7 +64,7 @@ function SetAcount() {
 
       console.log('Form data sent successfully!', response.data);
 
-      navigate('/userpro')
+      toastr.success("You finished your account setup")
     } 
     catch (error) {
     }
@@ -92,10 +91,10 @@ function SetAcount() {
           <div id="stylerec" />
           <div id="poly1" />
           <div className='midlep'>
-            <div>
+            {/* <div>
             <img src={process.env.PUBLIC_URL + '/Icons/userphoto.png'} style={{backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/backimage.png')`, backgroundSize: 'cover', 
               backgroundRepeat: 'no-repeat',backgroundPosition: 'center', height:'100px', width:'100px'}} alt='Back'  className="topicon"/>
-            </div>
+            </div> */}
         
             <p className='fp'>
             Set up your profile. Let’s know a little bit about you.
@@ -144,13 +143,9 @@ function SetAcount() {
                     </option>
                   ))}
                 </select>
-                {/* <span className='icon' style={{ cursor: 'pointer' }} onClick={handleIconClick}>
-                  &#x25BC;
-                </span> */}
-
+        
                 {showCountriesList && (
                   <div>
-                    {/* Display the list of countries as needed */}
                     <ul>
                       {countries.map((country) => (
                         <li key={country.alpha2Code} onClick={() => handleCountryChange(country)}>
@@ -168,7 +163,6 @@ function SetAcount() {
             <div>
               <button type='submit'>Save Changes</button>
             </div>
-
             <div >
               <button type='button' className='InputClear' onClick={handleClear} >Clear</button>
               </div>

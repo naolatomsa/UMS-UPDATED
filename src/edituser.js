@@ -21,24 +21,18 @@ function Edit(){
     const [userData, setUserData] = useState({});
     const [userActivities, setUserActivities] = useState([]);
     const navigate = useNavigate();
-    // console.log(userId)
-    //admin fetch user's data using their Id
+
     useEffect(() => {
         // Fetch user data when the component mounts
         const fetchData = async () => {
         try {
             const response = await axios.get(`http://127.0.0.1:8000/api/user_profile_by_admin/${userId}`);
             setUserData(response.data);
-            
-            // console.log(response.data)
-
-
+    
             const activitiesResponse = await axios.get(`http://127.0.0.1:8000/api/get_user_activity/${userId}`);
             setUserActivities(activitiesResponse.data); 
-            // console.log(userActivities)
 
         } catch (error) {
-            // console.error('Error fetching user data:', error);
         }
         };
 
@@ -46,6 +40,13 @@ function Edit(){
     }, []);
 
 
+    useEffect(() => {
+        if (userData) {
+         
+        setEmail(userData.email);
+        setUserName(userData.username);
+        }
+      }, []);
 
 
     //admin edit user
@@ -57,7 +58,6 @@ function Edit(){
                 Username, Password, confirmPassword, Email
             }
             );
-            // console.log("Edited succesfully", response.data)
         }catch(error){
 
         }
@@ -72,7 +72,7 @@ function Edit(){
         <>
         {
          authInfo ? ( <>
-           <div className='tolbar1'><TopBar name={authInfo.user.first_name}  fname={authInfo.user.last_name} /*imageSrc={userData.userprofile.photo}*/ /></div>
+           <div className='tolbar1'><TopBar nav={'/adminpro'} name={authInfo.user.first_name}  fname={authInfo.user.last_name} /*imageSrc={userData.userprofile.photo}*/ /></div>
         <div className='adminedituserpage'>
         < div className='userpage'>
                <a onClick={()=>navigate('/Admin Dashbord')} style={{margin:'0', height:'47px'}}> <img src={process.env.PUBLIC_URL + '/Icons/back.png'} style={{ width: '26px', height: '26px', marginTop:'20px' }} alt='Back' /></a>
@@ -85,7 +85,6 @@ function Edit(){
                 
                 <h2>{userData.first_name} {userData.last_name}</h2>
                 <p style={{color: 'black'}}>-</p>
-                {/* <p style={{color: 'black'}}>Addis Ababa</p> */}
             </div>
             </div>
             <ul className="card2">
@@ -116,9 +115,6 @@ function Edit(){
         </div>
 
         <div className="edituser">
-
-
-
         <div className='form-container edit'>
         <form className='form editform' onSubmit={handleEdituser}>
         <h1 className='htwo'>Edit {userData.username}'s Account</h1>

@@ -3,16 +3,12 @@ import { useEffect, useState } from 'react';
 import TopBar from './Topbar'
 import axios from 'axios'
 import './edituser.css'
-// import { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './Auth-context';
-// import { useParams } from 'react-router-dom';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
 
 function AdminAdduser(){
-
-  // const { userId } = useParams();
   const authInfo = useAuth();
   const navigate = useNavigate();
   const [ Username, setUsername] = useState("");
@@ -27,10 +23,8 @@ function AdminAdduser(){
             const response = await axios.post("http://127.0.0.1:8000/api/signup/", {
               Email, Password, ConfirmPassword, Username
             })
-            // console(response.data)
-            // console.log(response.data, "added seccusfully")
+
             toastr.success("You have Added new user Succesfully")
-            // navigate("/Admin Dashbord")
             setConfirmPassword("")
             setPassword("")
             setEmail("")
@@ -38,9 +32,7 @@ function AdminAdduser(){
            
   
           } catch(error){
-            // console.error(error);
-            // setError("Empty form")
-  
+
           }
 
         }
@@ -67,25 +59,6 @@ function AdminAdduser(){
         <div className='input2'>
         <input type="email" placeholder="email" required value={Email} onChange={(e) => setEmail(e.target.value)}/>
         </div>
-          {/* <div className="gender" style={{marginTop:'7.5px'}}>
-              <label>
-                <select value={gender} onChange={(e)=>setGender(e.target.value)}>
-                      <option value="" disabled selected>Gender</option>
-                      <option>Male</option>
-                      <option>Female</option>
-                  </select>
-              </label>
-            </div> */}
-            {/* <div className='input3'>
-            <input type='tel' placeholder='phone' required value={phone} onChange={(e)=> setPhone(e.target.value)}/>
-            </div> */}
-            {/* <div className='input3'>
-            <input type='email' placeholder='Email' required value={Email} onChange={(e)=> setEmail(e.target.value)}/>
-            </div> */}   
-
-            {/* <div className='input2'>
-            <input type='password' placeholder='password' required value={Username} onChange={(e) => setUserName(e.target.value)}/>
-            </div> */}
             <div className='input3'>
             <input type='password' placeholder='password' required value={Password} onChange={(e) => setPassword(e.target.value)}/>
             </div>
@@ -96,7 +69,6 @@ function AdminAdduser(){
             <button type='submit' >Add user</button> 
             </div>
         </form>
-        {/* <View /> */}
         </div>
     </div>
     :

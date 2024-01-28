@@ -11,7 +11,6 @@ import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
 
 const access = localStorage.getItem('access')
-// console.log(access)
 
 const UserUpdateProfile = () => {
 
@@ -37,7 +36,6 @@ const UserUpdateProfile = () => {
       
       setFirstName(authInfo.user.first_name);
       setLastName(authInfo.user.last_name);
-    
       setEmail(authInfo.user.email);
     }
   }, []);
@@ -50,7 +48,6 @@ const UserUpdateProfile = () => {
         const response = await axios.get('https://restcountries.com/v2/all');
           setCountries(response.data);
         } catch (error) {
-          // console.error('Error fetching countries:', error);
         }
       };
   
@@ -77,14 +74,8 @@ const UserUpdateProfile = () => {
             },
           }
         );
-        // console.log('profile Updated seccusfully!', response.data);
-        // window.location.reload();
-
-
-        
 
       }catch(error){
-        // console.log(error);
       }
       toastr.success('You are updated your profile successfully');
       setEmail("")
@@ -149,7 +140,6 @@ const UserUpdateProfile = () => {
 
                 {showCountriesList && (
                   <div>
-                    {/* Display the list of countries as needed */}
                     <ul>
                       {countries.map((country) => (
                         <li key={country.alpha2Code} onClick={() => handleCountryChange(country)}>
