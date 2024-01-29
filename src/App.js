@@ -33,7 +33,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/setaccount",
-    element: <SetAcount />,
+    element: access && userRole==='normal_users'?<SetAcount />:<login/>,
   },
   {
     path: "/edituser/:userId",

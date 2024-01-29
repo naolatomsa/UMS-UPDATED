@@ -5,6 +5,8 @@ import axios from 'axios';
 import './adminDashbord.css';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './Auth-context';
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 const access = localStorage.getItem('access')
 function Naol() {
@@ -26,10 +28,14 @@ function Naol() {
         const responseData = response.data;
         if (Array.isArray(responseData)) {
           setData(responseData.map(user => ({ ...user, status: true })));
-        } else {
+        } 
+        
+        else {
           console.error('Fetched data is not an array:', responseData);
           setData([]);
         }
+
+        console.log(response.data)
       } catch (error) {
         setData([]);
       }
@@ -65,15 +71,25 @@ function Naol() {
 
  //Handle delete user
  const handleDelete = async (userId) => {
-    alert('are you sure')
+  const confirmed = window.confirm('Are you sure you want to delete this user?');
+  if (confirmed){
     try {
       const response = await axios.delete(`http://127.0.0.1:8000/api/delete_user/${userId}`);
       console.log('User deleted successfully!', response.data);
+      
+      
+      toastr.info('Deleted successfully');
       window.location.reload();
     } catch (error) {
       console.error('Error deleting user:', error);
       
     }
+    
+  }
+  else{
+    toastr.info('Deletion canceled');
+  }
+
   };
 
 
@@ -81,7 +97,7 @@ function Naol() {
     <>
     {
       authInfo ?(    <div className="page">
-      <TopBar nav={'/adminpro'} name={authInfo.user.first_name} fname={authInfo.user.last_name} imageSrc={authInfo.user.userprofile.photo}/>
+      <TopBar nav={'/adminpro'} name={authInfo.user.first_name} fname={authInfo.user.last_name} imageSrc={authInfo.user.userprofile.photo!=null?authInfo.user.userprofile.photo:null}/>
       <div className="user-man">
         <p style={{
         color: 'black' , fontWeight:'bold'

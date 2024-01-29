@@ -9,13 +9,14 @@ import './topbar.css'
 import { useAuth } from './Auth-context';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
+import { useRef } from 'react';
 
 const access = localStorage.getItem('access')
 
 const UserUpdateProfile = () => {
 
   const authInfo = useAuth();
-  
+  console.log(authInfo)
   const [location, setLocation] = useState();
   const [countries, setCountries] = useState([]);
   const [showCountriesList, setShowCountriesList] = useState(false);
@@ -24,6 +25,8 @@ const UserUpdateProfile = () => {
   const [phone, setPhone] = useState('');
   const [gender, setGender] = useState('');
   const [email, setEmail] = useState('');
+  const [image, setImage] = useState('')
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (authInfo) {
@@ -31,6 +34,7 @@ const UserUpdateProfile = () => {
         setLocation(authInfo.user.userprofile.location);
         setPhone(authInfo.user.userprofile.phone);
         setGender(authInfo.user.userprofile.gender);
+        setImage(authInfo.user.userprofile.photo);
 
       }
       
@@ -63,11 +67,19 @@ const UserUpdateProfile = () => {
     };
     const handleUserUpdateProfile = async(e) => {
       e.preventDefault();
+      const formData = new FormData();
+      formData.append('firstName', firstName);
+      formData.append('lastName', lastName);  
+      formData.append('gender', gender);
+      formData.append('phone', phone);
+      // formData.append('date', date);
+      formData.append('location', location);
+      formData.append('image', image);
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/update_profile',
-          { 
-            firstName, lastName, location, phone, gender, email, 
-          },
+        const response = await axios.post('http://127.0.0.1:8000/api/update_profile', formData,
+          // { 
+          //   firstName, lastName, location, phone, gender, email, 
+          // },
           {
             headers: {
               Authorization: `Bearer ${access}`,
@@ -84,7 +96,11 @@ const UserUpdateProfile = () => {
       setGender("")
       setFirstName("")
       setLastName("")
-  
+      window.location.reload();
+    };
+    const handleImage = () => {
+      // Trigger the file input when the icon is clicked
+      fileInputRef.current.click();
     };
     
   return (
@@ -92,20 +108,29 @@ const UserUpdateProfile = () => {
     {
            
       authInfo?
-      <><TopBar name={authInfo.user.first_name} fname={authInfo.user.last_name} imageSrc={authInfo.user.image} /><div className="card auserboard">
+      <><TopBar home={'/userpro'} nav={'/userpro'} name={authInfo.user.first_name} fname={authInfo.user.last_name} imageSrc={authInfo.user.userprofile!=null?authInfo.user.userprofile.photo:image} /><div className="card auserboard">
 
 
             <div className="wrapper userprofile" style={{ height: '50px' }}>
               <a onClick={() => navigate('/userpro')} className="third after" style={{ fontSize: '17px' }}>My profile</a>
               <a className='third after' style={{ fontSize: '17px' }}>Update profile</a>
             </div>
-            <IMG imgName={"https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg"}
-              size={'100px'} style={{
-                backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/addphoto.png')`, backgroundSize: '20px 20px',
-                backgroundRepeat: 'no-repeat', backgroundPosition: 'left 10px center', paddingLeft: '50px'
-              }} />
+            <div style={{ position: 'relative' }}>
+              <IMG imgName={authInfo.user.userprofile != null ? authInfo.user.userprofile.photo : image} size={'100px'} />
+              <div style={{ position: 'absolute', bottom: 0, right: 0 }}>
+                <a onClick={handleImage}><img style={{ marginBottom: '30px', paddingLeft: '45px', width:'70px'}} src={process.env.PUBLIC_URL + '/Icons/addphoto.png'} alt='Add Photo' className="topicon" /></a>
+              </div>
+            </div>
+
+            
             <form className='editform' onSubmit={handleUserUpdateProfile}>
 
+                    <input
+                type="file" accept="image/*" value={FormData.image} onChange={(e) => setImage(e.target.files[0])}
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+      
+              />
               <div className='input3'>
                 <input type='text' placeholder='first name'  value={firstName} onChange={(e) => setFirstName(e.target.value)} />
               </div>

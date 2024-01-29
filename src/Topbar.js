@@ -8,11 +8,15 @@ function TopBar(props) {
   const fname = props.fname;
   const imageSrc = props.imageSrc;
   const nav = props.nav;
+  const home = props.home;
   const message = props.message;
   const navigate = useNavigate();
   
   const handleNav=()=>{
     navigate(nav)
+  }
+  const handleHome=()=>{
+    navigate(home)
   }
 
   // Logout
@@ -30,8 +34,8 @@ function TopBar(props) {
     return(
       
      <div className="user-bar">
-     <img src={process.env.PUBLIC_URL + '/Icons/top icon.png'} style={{ width: '26px', height: '26px' }} alt='Back'  className="topicon"/>
-     <p className="Iconname">UMS</p>
+    <a onClick={handleHome}><img src={process.env.PUBLIC_URL + '/Icons/top icon.png'} style={{ width: '26px', height: '26px' }} alt='Back'  className="topicon"/></a> 
+     <a onClick={handleHome}><p className="Iconname">UMS</p></a>
     
       <p className="topbarname" style={{color:'white'}}><a onClick={handleNav} style={{color:'white'}}>{name} {fname}</a></p>
       <div className="left">

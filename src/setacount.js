@@ -49,12 +49,21 @@ function SetAcount() {
 
   const handleSave = async (e) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('firstName', firstName);
+    formData.append('lastName', lastName);
+    formData.append('gender', gender);
+    formData.append('phone', phone);
+    formData.append('date', date);
+    formData.append('location', location);
+    formData.append('image', image);
     try {
       const response = await axios.post(
-        'http://127.0.0.1:8000/api/update_profile',
-        {
-          firstName, lastName, gender, phone, date, location, image,
-        },
+        'http://127.0.0.1:8000/api/update_profile', formData,
+        // {
+        //   firstName, lastName, gender, phone, date, location, image,
+        // },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -62,9 +71,18 @@ function SetAcount() {
         }
       );
 
-      console.log('Form data sent successfully!', response.data);
+      // console.log('Form data sent successfully!', response.data);
 
       toastr.success("You finished your account setup")
+      setFirstName('')
+      setLastName('')
+      setGender('')
+      setPhone('')
+      setDate('')
+      setLocation('')
+      setImage('')
+      navigate('/userpro')
+      window.location.reload()
     } 
     catch (error) {
     }
@@ -157,7 +175,7 @@ function SetAcount() {
                 )}
               </div>
             <div className='input4'>
-              <input type='file' placeholder='upload picture' required value={image} onChange={(e)=>{setImage(e.target.value)}}/>
+              <input type='file' accept="image/*" placeholder='upload picture'  value={FormData.image} onChange={(e)=>{setImage(e.target.files[0])}}/>
             </div>
             <div className='Buttons'>
             <div>

@@ -10,9 +10,14 @@ import { useAuth } from './Auth-context';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
+
+const token = localStorage.getItem('access');
 function Edit(){
     const authInfo = useAuth();
+    
     const [Username, setUserName] = useState('');
     const [Email, setEmail] = useState('');
     const [Password, setPassword] = useState('');
@@ -26,11 +31,29 @@ function Edit(){
         // Fetch user data when the component mounts
         const fetchData = async () => {
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/user_profile_by_admin/${userId}`);
+            const response = await axios.get(`http://127.0.0.1:8000/api/user_profile_by_admin/${userId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+            );
             setUserData(response.data);
+            // console.log('naol')
+            // console.log(response.data)
+
+
     
-            const activitiesResponse = await axios.get(`http://127.0.0.1:8000/api/get_user_activity/${userId}`);
+            const activitiesResponse = await axios.get(`http://127.0.0.1:8000/api/get_user_activity/${userId}`
+            ,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+            );
             setUserActivities(activitiesResponse.data); 
+            console.log(activitiesResponse.data)
 
         } catch (error) {
         }
@@ -54,10 +77,21 @@ function Edit(){
     const handleEdituser = async(e)=>{
         e.preventDefault();
         try{
-            const response = await axios.s(`http://127.0.0.1:8000/api/user_profile_by_admin/${userId}`,{
+            const response = await axios.put(`http://127.0.0.1:8000/api/user_profile_by_admin/${userId}`,{
                 Username, Password, confirmPassword, Email
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             }
             );
+            // console.log(response.data)
+            toastr.success('you have edited successfully')
+            setEmail('')
+            setConfirmPassword('')
+            setPassword('')
+            setUserName('')
         }catch(error){
 
         }
@@ -72,19 +106,20 @@ function Edit(){
         <>
         {
          authInfo ? ( <>
-           <div className='tolbar1'><TopBar nav={'/adminpro'} name={authInfo.user.first_name}  fname={authInfo.user.last_name} /*imageSrc={userData.userprofile.photo}*/ /></div>
+           <div className='tolbar1'><TopBar  home={'/Admin Dashbord'} nav={'/adminpro'} name={authInfo.user.first_name}  fname={authInfo.user.last_name} imageSrc={authInfo.user.userprofile.photo!=null?authInfo.user.userprofile.photo:null} /></div>
         <div className='adminedituserpage'>
         < div className='userpage'>
                <a onClick={()=>navigate('/Admin Dashbord')} style={{margin:'0', height:'47px'}}> <img src={process.env.PUBLIC_URL + '/Icons/back.png'} style={{ width: '26px', height: '26px', marginTop:'20px' }} alt='Back' /></a>
 
             <div className="card">
             <div className="card1">
-            <IMG /*imgName={userData.userprofile.photo} */
+            <IMG imgName={userData.userprofile!=null?userData.userprofile.photo:null}
             size={'100px'}/>
             <div className="card__text">
                 
                 <h2>{userData.first_name} {userData.last_name}</h2>
-                <p style={{color: 'black'}}>-</p>
+          
+                <p style={{color: 'black'}}>{userData.userprofile!=null?userData.userprofile.location:"-"}</p>
             </div>
             </div>
             <ul className="card2">
@@ -98,7 +133,7 @@ function Edit(){
             </li>
             <li>
             <img src={process.env.PUBLIC_URL + '/Icons/men.png'} style={{ width: '15px', height: '15px',marginRight:'10px', marginTop:'20px' }} alt='Back'  className="topicon"/>
-                <span>-</span>
+                <span>{userData.userprofile!=null?userData.userprofile.gender:"-"}</span>
             </li>
             </ul>
             <ul className="card3">
@@ -108,7 +143,7 @@ function Edit(){
             </li>
             <li>
             <img src={process.env.PUBLIC_URL + '/Icons/phone.png'} style={{ width: '15px', height: '15px',marginRight:'10px', marginTop:'20px' }} alt='Back'  className="topicon"/>
-                <span>-</span>
+                <span>{userData.userprofile!=null?userData.userprofile.phone:"-"}</span>
             </li>
             </ul>
         </div>
@@ -119,18 +154,18 @@ function Edit(){
         <form className='form editform' onSubmit={handleEdituser}>
         <h1 className='htwo'>Edit {userData.username}'s Account</h1>
         <div className='input2'>
-        <input type="text" placeholder="username" required value={Username} onChange={(e)=>setUserName(e.target.value)}/>
+        <input type="text" placeholder="username"  value={Username} onChange={(e)=>setUserName(e.target.value)}/>
         </div>
         <div className='input2'>
-        <input type="email" placeholder="email" required value={Email} onChange={(e)=>setEmail(e.target.value)}/>
+        <input type="email" placeholder="email"  value={Email} onChange={(e)=>setEmail(e.target.value)}/>
         </div>
         <div className='input3'>
-            <input type='password' placeholder='password' required value={Password} onChange={(e)=>setPassword(e.target.value)}/>
+            <input type='password' placeholder='password'  value={Password} onChange={(e)=>setPassword(e.target.value)}/>
             </div>
        
 
             <div className='inputfour'>
-            <input type='password' placeholder='confirm password' required value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)}/>
+            <input type='password' placeholder='confirm password'  value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)}/>
             </div>
             <div className='input6'>
             <button type='submit'>save</button>

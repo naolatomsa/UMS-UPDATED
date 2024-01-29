@@ -14,7 +14,6 @@ const access = localStorage.getItem('access')
 
 const ProfileOfAdmin = () => {
   const authInfo = useAuth();
-  console.log(authInfo)
   const [location, setLocation] = useState('');
   const [countries, setCountries] = useState([]);
   const [showCountriesList, setShowCountriesList] = useState(false);
@@ -89,7 +88,7 @@ const ProfileOfAdmin = () => {
     <>
     {
       authInfo?
-    <><div className='tolbar1'><TopBar  name={authInfo.user.first_name} fname={authInfo.user.last_name} imageSrc={authInfo.user.userprofile.photo}/></div><div className="adminpro">
+    <><div className='tolbar1'><TopBar home={'/Admin Dashbord'} name={authInfo.user.first_name} fname={authInfo.user.last_name} imageSrc={authInfo.user.userprofile.photo!=null?authInfo.user.userprofile.photo:null}/></div><div className="adminpro">
             <div>
 
               <div className='userpage'>
@@ -97,7 +96,7 @@ const ProfileOfAdmin = () => {
 
                 <div className="card">
                   <div className="card1">
-                    <IMG imgName={authInfo.user.userprofile.photo}
+                    <IMG imgName={authInfo.user.userprofile.photo!=null?authInfo.user.userprofile.photo:null}
                       size={'100px'} />
                     <div className="card__text">
 

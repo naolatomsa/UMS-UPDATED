@@ -8,13 +8,15 @@ import './edituser.css'
 const role = localStorage.getItem('userRole')
 const UserDashboard = () => {
   const authInfo = useAuth();
+  console.log(authInfo)
+
   const navigate = useNavigate();
 
   return (
    <>
    {
     authInfo ? ( <>
-      <TopBar name={authInfo.user.first_name} fname={authInfo.user.last_name} imageSrc={authInfo.user.userprofile!==null?authInfo.user.userprofile.photo:""}/>
+      <TopBar name={authInfo.user.first_name} fname={authInfo.user.last_name} imageSrc={authInfo.user.userprofile!=null?authInfo.user.userprofile.photo:null}/>
       <div className="card auserboard">
       <li style={{display:'flex', gap:'10px'}}>
         <a  onClick={()=>navigate('/setaccount')}><img src={process.env.PUBLIC_URL + '/Icons/backpage.png'} style={{ width: '26px', height: '26px' }} alt='Back'  className="topicon"/></a>
@@ -27,7 +29,7 @@ const UserDashboard = () => {
               <a onClick={()=>navigate('/updatepro')} className='third after' style={{fontSize:'17px'}}>Update profile</a>
            </div>
   
-        <IMG imgName={authInfo.user.userprofile!==null?authInfo.user.userprofile.photo:""} 
+        <IMG imgName={authInfo.user.userprofile!==null?authInfo.user.userprofile.photo:null} 
         size={'100px'}/>
         <div className="card__text" >
         <h2>{authInfo.user.first_name}  {authInfo.user.last_name}</h2>

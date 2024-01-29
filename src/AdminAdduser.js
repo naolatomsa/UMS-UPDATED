@@ -29,6 +29,7 @@ function AdminAdduser(){
             setPassword("")
             setEmail("")
             setUsername("")
+            navigate('/Admin Dashbord')
            
   
           } catch(error){
@@ -48,7 +49,7 @@ function AdminAdduser(){
     {
       authInfo? 
       <div className='Add-user'>
-        <TopBar name= {authInfo.user.username} imageSrc={authInfo.user.image}/>
+        <TopBar home={'/Admin Dashbord'} nav={'/adminpro'} name= {authInfo.user.first_name} fname= {authInfo.user.last_name} imageSrc={authInfo.user.userprofile.photo!=null?authInfo.user.userprofile.photo:null}/>
         <a onClick={()=>navigate('/Admin Dashbord')}><img src={process.env.PUBLIC_URL + '/Icons/back.png'} style={{ width: '26px', height: '26px', marginLeft:'100px' }} alt='Back' /></a>
         <div className='form-container adduser'>
         <form className='form editform' style={{height:"500px"}} onSubmit={handleAdduser}>
