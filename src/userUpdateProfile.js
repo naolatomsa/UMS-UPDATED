@@ -69,6 +69,12 @@ const UserUpdateProfile = () => {
     };
     const handleUserUpdateProfile = async(e) => {
       e.preventDefault();
+
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(email)) {
+        toastr.warning('Invalid email format');
+        return;
+      }
       const formData = new FormData();
       formData.append('firstName', firstName);
       formData.append('lastName', lastName);  

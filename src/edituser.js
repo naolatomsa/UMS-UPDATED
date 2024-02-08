@@ -78,26 +78,50 @@ function Edit(){
 
     const handleEdituser = async(e)=>{
         e.preventDefault();
-        try{
-            const response = await axios.put(`http://127.0.0.1:8000/api/user_profile_by_admin/${userId}`,{
-                Username, Password, confirmPassword, Email
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
+
+        if(Password===confirmPassword)
+        {
+            const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+          
+            if (!usernameRegex.test(Username)) {
+              toastr.warning('Invalid username format');
+              return;
             }
-            );
-            if(response.status===200){
-                toastr.success('you have edited successfully')
+          
+            if (!emailRegex.test(Email)) {
+              toastr.warning('Invalid email format');
+              return;
             }
-            else{
-                setMessage('Errorrr')
+          
+            if (!passwordRegex.test(Password)) {
+              toastr.warning('Your password length must be 8 characters and above, it must contain at least one lowercase, one uppercase, one digit.  ');
+              return;
             }
-            
-        }catch(error){
+            try{
+                const response = await axios.put(`http://127.0.0.1:8000/api/user_profile_by_admin/${userId}`,{
+                    Username, Password, confirmPassword, Email
+                },
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+                );
+                
+            }catch(error){
+    
+            }
+         
 
         }
+        else{
+            toastr.warning('Password Doesn`t much');
+                
+        }
+
+
     }
 
 

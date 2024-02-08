@@ -9,6 +9,8 @@ import { useAuth } from './Auth-context';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
 import { useRef } from 'react';
+import 'react-phone-input-2/lib/style.css';
+import PhoneInput from 'react-phone-input-2';
 
 const access = localStorage.getItem('access')
 
@@ -69,6 +71,11 @@ const ProfileOfAdmin = () => {
     const handleAdminUpdateProfile = async(e) => {
       e.preventDefault();
 
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(email)) {
+        toastr.warning('Invalid email format');
+        return;
+      }
       const formData = new FormData();
       formData.append('firstName', firstName);
       formData.append('lastName', lastName);  
@@ -183,9 +190,27 @@ const ProfileOfAdmin = () => {
                     </select>
                   </label>
                 </div>
-                <div className='input3'>
-                  <input type='tel' placeholder='phone' required value={phone} onChange={(e) => setPhone(e.target.value)} />
-                </div>
+                <div className='input2'>
+          <PhoneInput
+          
+          style={{marginTop: '10px', border: '1px solid #38A899' ,width:'302px', borderRadius:'3px'}}
+          inputProps={{
+            style: {
+              backgroundColor: '#eee',
+              padding: '12px 15px',
+              border: 'none',
+              margin: '8px 0',
+              marginLeft:'30px',
+              width: '270px',
+              height: '50px',   
+            },
+          }}
+          country={'et'}
+          value={phone} 
+          onChange={(phone) => setPhone(phone)} 
+      />
+          
+          </div>
                 <div className='inputcountry gender' style={{ marginTop: '7.5px' }}>
                   <select
                     value={location}

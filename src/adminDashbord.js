@@ -1,3 +1,6 @@
+//Admin dashboard
+
+//Importing required materials
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import TopBar from './Topbar';
@@ -10,21 +13,20 @@ import 'toastr/build/toastr.min.css';
 import IMG from './img';
 import Modal from 'react-modal';
 
-const access = localStorage.getItem('access')
+const access = localStorage.getItem('access') //getting access token from local storage
 function Naol() {
-  const authInfo = useAuth();
-  
+  const authInfo = useAuth();//context api used to fetch user data
+  //use state(component memory)
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [filterRole, setFilterRole] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
-
   const [role, setRole] = useState('');
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
-
+  //fetching user's data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -38,8 +40,6 @@ function Naol() {
           console.error('Fetched data is not an array:', responseData);
           setData([]);
         }
-
-        // console.log(response.data)
       } catch (error) {
         setData([]);
       }
@@ -95,6 +95,7 @@ const handleDelete = async (userId) => {
 };
 
 
+//JSX
   return (
     <>
     {
@@ -107,9 +108,6 @@ const handleDelete = async (userId) => {
        
       </div>
       <div className="user-role">
-        {/* <p style={{
-        color: 'black'
-      }}> UMS</p> */}
             <div className="selectdiv">
           <label>
               <select value={filterStatus} onChange={(e)=>setFilterStatus(e.target.value)}>
@@ -119,22 +117,13 @@ const handleDelete = async (userId) => {
               </select>
           </label>
           <label> 
-              <select value={filterRole} onChange={(e) => setFilterRole(e.target.value)}>
+              <select className="filter-role" value={filterRole} onChange={(e) => setFilterRole(e.target.value)}>
                   <option value=''>Role</option>
                   <option>Admin</option>
                   <option>User</option>
               </select>
           </label>
         </div>
-        {/* <div className="selectdiv">
-          <label>
-              <select value={filterRole} onChange={(e) => setFilterRole(e.target.value)}>
-                  <option value=''>Role</option>
-                  <option>Admin</option>
-                  <option>User</option>
-              </select>
-          </label>
-        </div> */}
         <button onClick={()=>navigate('/adduser')}>Add User</button>
       </div>
       <div className="user-top">
@@ -194,7 +183,6 @@ const handleDelete = async (userId) => {
 
         <Modal className="modal" isOpen={isDeleteModalOpen}>
         <div >
-          {/* <h2>Confirm Delete</h2> */}
           <p style={{color:'black', fontWeight:'bold'}}>Are you sure you want to delete this user?</p>
           <button style={{width:'70px', height:'50px', borderRadius:'4px', backgroundColor:'red', marginLeft:'50px' }} onClick={handleConfirmDelete}>Yes</button>
           <button style={{width:'70px', height:'50px', borderRadius:'4px', marginLeft:'50px'}} onClick={closeDeleteModal}>No</button>
@@ -205,7 +193,6 @@ const handleDelete = async (userId) => {
       <h1>Loading...</h1>
     )
     }
-
     
     </>
   );

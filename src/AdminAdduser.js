@@ -1,3 +1,6 @@
+//Admin Add new user
+
+//importing required materials
 import React from 'react'
 import { useEffect, useState } from 'react';
 import TopBar from './Topbar'
@@ -8,42 +11,72 @@ import { useAuth } from './Auth-context';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
 
+//function to write component
 function AdminAdduser(){
+
+  //context api to fech user's data
   const authInfo = useAuth();
   const navigate = useNavigate();
-  const [ Username, setUsername] = useState("");
+   //use state(component memory)
+  const [Username, setUsername] = useState("");
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");  
   const [error, setError] = useState('');
-      const handleAdduser = async (e)=>{
-        e.preventDefault();
-        if(Password===ConfirmPassword){
-          try{
-            const response = await axios.post("http://127.0.0.1:8000/api/signup/", {
-              Email, Password, ConfirmPassword, Username
-            })
 
-            toastr.success("You have Added new user Succesfully")
-            setConfirmPassword("")
-            setPassword("")
-            setEmail("")
-            setUsername("")
-            navigate('/Admin Dashbord')
-           
-  
-          } catch(error){
+  //function to handle add new user
+  const handleAdduser = async (e)=>{
+    e.preventDefault(); 
+    if(Password===ConfirmPassword){
 
-          }
-
+        // Regular expressions for validation
+        const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+      
+        //regex validation
+        if (!usernameRegex.test(Username)) {
+          toastr.warning('Invalid username format');
+          return;
         }
-        else{
-          toastr.warning("Password Doesn`t match")
+      
+        if (!emailRegex.test(Email)) {
+          toastr.warning('Invalid email format');
+          return;
         }
+      
+        if (!passwordRegex.test(Password)) {
+          toastr.warning('Your password length must be 8 characters and above, it must contain at least one lowercase, one uppercase, one digit.  ');
+          return;
+        }
+
+      //connection with backend
+      try{
+        const response = await axios.post("http://127.0.0.1:8000/api/signup/", {
+          Email, Password, ConfirmPassword, Username
+        })
+
+        toastr.success("You have Added new user Succesfully")
+        setConfirmPassword("")
+        setPassword("")
+        setEmail("")
+        setUsername("")
+        navigate('/Admin Dashbord')
+        
+
+      } catch(error){
 
       }
 
+      }
+      else{
+        toastr.warning("Password Doesn`t match")
+      }
 
+  }
+
+
+  //JSX 
   return (
     <>
     {
@@ -79,4 +112,4 @@ function AdminAdduser(){
   )
 }
 
-export default AdminAdduser
+export default AdminAdduser;
