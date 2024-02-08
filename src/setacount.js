@@ -6,6 +6,8 @@ import IMG from './img';
 import './login.css';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
+import 'react-phone-input-2/lib/style.css';
+import PhoneInput from 'react-phone-input-2';
 
 const token = localStorage.getItem('access')
 function SetAcount() {
@@ -134,7 +136,7 @@ function SetAcount() {
             </div>
     
         <div className="gender">
-          <label>
+          <label style={{marginLeft:'0px' }}>
             <select value={gender} onChange={(e)=>setGender(e.target.value)}>
                   <option value="" disabled selected>Gender</option>
                   <option>Male</option>
@@ -142,8 +144,27 @@ function SetAcount() {
               </select>
           </label>
         </div>
+     
           <div className='input2'>
-          <input type="tel" name="phone" placeholder="Enter your phone number" required value={phone} onChange={(e)=>{setPhone(e.target.value)}}/>
+          <PhoneInput
+          
+          style={{marginTop: '10px', border: '1px solid #38A899', borderRadius:'3px'}}
+          inputProps={{
+            style: {
+              backgroundColor: '#eee',
+              padding: '12px 15px',
+              border: 'none',
+              margin: '8px 0',
+              marginLeft:'30px',
+              width: '270px',
+              height: '50px',   
+            },
+          }}
+          country={'et'}
+          value={phone} 
+          onChange={(phone) => setPhone(phone)} 
+      />
+          
           </div>
    
             <div className='input4'>
@@ -174,8 +195,9 @@ function SetAcount() {
                   </div>
                 )}
               </div>
-            <div className='input4'>
-              <input type='file' accept="image/*" placeholder='upload picture'  value={FormData.image} onChange={(e)=>{setImage(e.target.files[0])}}/>
+            <div className='input4' >
+              
+              <input type='file' accept="image/*"   value={FormData.image} onChange={(e)=>{setImage(e.target.files[0])}}/>
             </div>
             <div className='Buttons'>
             <div>

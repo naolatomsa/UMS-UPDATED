@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from './Auth-context';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
+import IMG from './img';
+import Modal from 'react-modal';
 
 const access = localStorage.getItem('access')
 function Naol() {
@@ -16,6 +18,8 @@ function Naol() {
   const [search, setSearch] = useState('');
   const [filterRole, setFilterRole] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   const [role, setRole] = useState('');
   const navigate = useNavigate();
@@ -35,7 +39,7 @@ function Naol() {
           setData([]);
         }
 
-        console.log(response.data)
+        // console.log(response.data)
       } catch (error) {
         setData([]);
       }
@@ -46,51 +50,49 @@ function Naol() {
   }, []);
 
 
-  //Handle Deactivate user
-  const handleDeactivate = async (userId) => {
+// Handle Deactivate user
+const handleDeactivate = async (userId) => {
+  try {
+    const response = await axios.get(`http://127.0.0.1:8000/api/deactivate_user/${userId}`);
 
-    alert('are you sure')
-    try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/deactivate_user/${userId}`);
-      console.log('User deactivated successfully!', response.data);
-      
-      // window.location.reload();
-
-      setData((prevData) =>
-        prevData.map(user =>
-          user.id === userId ? { ...user, status: !user.status } : user
-        )
-      );
+    setData((prevData) =>
+      prevData.map((item) =>
+        item.id === userId ? { ...item, is_active: !item.is_active } : item
+      )
+    );
+  } catch (error) {
+    console.error('Error deactivating user:', error);
+  }
+};
   
-    } catch (error) {
-      console.error('Error deactivating user:', error);
 
-    }
-  };
+//modal
+const openDeleteModal = (userId) => {
+  setSelectedUserId(userId);
+  setIsDeleteModalOpen(true);
+};
 
+const closeDeleteModal = () => {
+  setIsDeleteModalOpen(false);
+};
 
- //Handle delete user
- const handleDelete = async (userId) => {
-  const confirmed = window.confirm('Are you sure you want to delete this user?');
-  if (confirmed){
-    try {
-      const response = await axios.delete(`http://127.0.0.1:8000/api/delete_user/${userId}`);
-      console.log('User deleted successfully!', response.data);
-      
-      
-      toastr.info('Deleted successfully');
-      window.location.reload();
-    } catch (error) {
-      console.error('Error deleting user:', error);
-      
-    }
-    
-  }
-  else{
-    toastr.info('Deletion canceled');
+ // Handle delete user
+ const handleConfirmDelete = async () => {
+  try {
+    const response = await axios.delete(`http://127.0.0.1:8000/api/delete_user/${selectedUserId}`);
+    toastr.info('Deleted successfully');
+
+    setData((prevData) => prevData.filter((item) => item.id !== selectedUserId));
+  } catch (error) {
+    console.error('Error deleting user:', error);
   }
 
-  };
+  closeDeleteModal();
+};
+
+const handleDelete = async (userId) => {
+  openDeleteModal(userId);
+};
 
 
   return (
@@ -102,13 +104,12 @@ function Naol() {
         <p style={{
         color: 'black' , fontWeight:'bold'
       }}>User Management</p>
-        <input type="text" placeholder="search" value={search} onChange={(e)=>setSearch(e.target.value)} style={{backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/search.png')`, backgroundSize: '20px 20px', 
-                  backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px'}} />
+       
       </div>
       <div className="user-role">
-        <p style={{
+        {/* <p style={{
         color: 'black'
-      }}> UMS</p>
+      }}> UMS</p> */}
             <div className="selectdiv">
           <label>
               <select value={filterStatus} onChange={(e)=>setFilterStatus(e.target.value)}>
@@ -117,9 +118,7 @@ function Naol() {
                   <option>Inactive</option>
               </select>
           </label>
-        </div>
-        <div className="selectdiv">
-          <label>
+          <label> 
               <select value={filterRole} onChange={(e) => setFilterRole(e.target.value)}>
                   <option value=''>Role</option>
                   <option>Admin</option>
@@ -127,15 +126,31 @@ function Naol() {
               </select>
           </label>
         </div>
-        <button>Filter</button>
+        {/* <div className="selectdiv">
+          <label>
+              <select value={filterRole} onChange={(e) => setFilterRole(e.target.value)}>
+                  <option value=''>Role</option>
+                  <option>Admin</option>
+                  <option>User</option>
+              </select>
+          </label>
+        </div> */}
+        <button onClick={()=>navigate('/adduser')}>Add User</button>
       </div>
       <div className="user-top">
-        <p style={{
+        <div>
+           <p style={{
         color: 'black', fontWeight:'bold'
       }}>
-          User <br /> here is a list of all User
+          User <br /> 
         </p>
-        <button onClick={()=>navigate('/adduser')}>Add User</button>
+        <p style={{
+        color: 'black'
+      }}>here is a list of all User</p>
+        </div>
+       
+        <input type="text" placeholder="search" value={search} onChange={(e)=>setSearch(e.target.value)} style={{backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/search.png')`, backgroundSize: '20px 20px', 
+                  backgroundRepeat: 'no-repeat',backgroundPosition: 'left 10px center', paddingLeft: '50px'}} />
       </div>
   
       <table>
@@ -150,7 +165,8 @@ function Naol() {
           </thead>
           <tbody> 
           {data.filter((item)=>{
-            const usernameMatch = item.username.toLowerCase().includes(search.toLowerCase());
+            const usernameMatch = item.username.toLowerCase().includes(search.toLowerCase()) || 
+            item.email.toLowerCase().includes(search.toLowerCase())
 
             // Filter by role
             const roleMatch = item.groups[0] === 1 && filterRole === 'Admin' ||
@@ -166,16 +182,24 @@ function Naol() {
            }) 
            .map((item)=>(
           <tr key={item.id}>
-          <td><a onClick={()=> navigate(`/edituser/${item.id}`)}>{item.username}</a></td>
+          <td  style={{display:'flex', gap:'10px'}}><IMG   imgName={item.userprofile!= null ? item.userprofile.photo : null} size={'20px'} />   <div>{item.username}</div></td>
           <td>{item.email}</td>
           <td>{item.groups[0]===1?'Admin':'User'}</td>
-          <td>{item.is_active? 'Active':'Inactive'}</td>
-          <td><a onClick={() => handleDeactivate(item.id)}>{item.is_active? (<img src={process.env.PUBLIC_URL + '/Icons/deactivate.jpg'} style={{ width: '25px', height: '25px' }} alt='Back' />):
-          (<img src={process.env.PUBLIC_URL + '/Icons/activeuser.png'} style={{ width: '25px', height: '25px' }} alt='Back' />)}</a>
-          <a onClick={() => handleDelete(item.id)}><img src={process.env.PUBLIC_URL + '/Icons/delete.jpg'} style={{ width: '20px', height: '20px' }} alt='Back' /></a></td>
+          <td><a  onClick={() => handleDeactivate(item.id)}>{item.is_active? 'Active':'Inactive'}</a></td>
+          <td><a  onClick={()=> navigate(`/edituser/${item.id}`)}><img src={process.env.PUBLIC_URL + '/Icons/active.jpg'} style={{ width: '20px', height: '20px' }} alt='Back' /></a>
+          <a onClick={() => handleDelete(item.id)}><img src={process.env.PUBLIC_URL + '/Icons/delete.jpg'} style={{ width: '20px', height: '20px' , marginLeft:'5px'}} alt='Back' /></a></td>
           </tr>
           ))}</tbody>
         </table>
+
+        <Modal className="modal" isOpen={isDeleteModalOpen}>
+        <div >
+          {/* <h2>Confirm Delete</h2> */}
+          <p style={{color:'black', fontWeight:'bold'}}>Are you sure you want to delete this user?</p>
+          <button style={{width:'70px', height:'50px', borderRadius:'4px', backgroundColor:'red', marginLeft:'50px' }} onClick={handleConfirmDelete}>Yes</button>
+          <button style={{width:'70px', height:'50px', borderRadius:'4px', marginLeft:'50px'}} onClick={closeDeleteModal}>No</button>
+        </div>
+      </Modal>
     </div>):
     (
       <h1>Loading...</h1>

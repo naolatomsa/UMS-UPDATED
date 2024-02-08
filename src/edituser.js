@@ -24,7 +24,9 @@ function Edit(){
     const [confirmPassword, setConfirmPassword] = useState('');
     const { userId } = useParams();
     const [userData, setUserData] = useState({});
+    // const [image, setImage] = useState('')
     const [userActivities, setUserActivities] = useState([]);
+    const [message, setMessage] = useState('')
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -39,11 +41,6 @@ function Edit(){
             }
             );
             setUserData(response.data);
-            // console.log('naol')
-            // console.log(response.data)
-
-
-    
             const activitiesResponse = await axios.get(`http://127.0.0.1:8000/api/get_user_activity/${userId}`
             ,
             {
@@ -53,11 +50,12 @@ function Edit(){
             }
             );
             setUserActivities(activitiesResponse.data); 
-            console.log(activitiesResponse.data)
 
         } catch (error) {
         }
         };
+
+      
 
         fetchData();
     }, []);
@@ -65,12 +63,16 @@ function Edit(){
 
     useEffect(() => {
         if (userData) {
-         
-        setEmail(userData.email);
-        setUserName(userData.username);
-        }
-      }, []);
+          setEmail(userData.email);
+          setUserName(userData.username);
+        //   if(userData.userprofile!=null){
+        //     setImage(userData.userprofile.photo)
 
+        //   }
+          
+        }
+      }, [userData]);
+    
 
     //admin edit user
 
@@ -86,12 +88,13 @@ function Edit(){
               },
             }
             );
-            // console.log(response.data)
-            toastr.success('you have edited successfully')
-            setEmail('')
-            setConfirmPassword('')
-            setPassword('')
-            setUserName('')
+            if(response.status===200){
+                toastr.success('you have edited successfully')
+            }
+            else{
+                setMessage('Errorrr')
+            }
+            
         }catch(error){
 
         }
@@ -113,14 +116,18 @@ function Edit(){
 
             <div className="card">
             <div className="card1">
-            <IMG imgName={userData.userprofile!=null?userData.userprofile.photo:null}
-            size={'100px'}/>
-            <div className="card__text">
-                
-                <h2>{userData.first_name} {userData.last_name}</h2>
-          
-                <p style={{color: 'black'}}>{userData.userprofile!=null?userData.userprofile.location:"-"}</p>
-            </div>
+            { userData.userprofile!=null?
+            (
+                <><IMG  imgName={userData.userprofile!==null?userData.userprofile.photo:null}
+                                                size={'100px'} /><div className="card__text">
+
+                                                    <h2>{userData.first_name} {userData.last_name}</h2>
+
+                                                    <p style={{ color: 'black' }}>{userData.userprofile.location!= null ? userData.userprofile.location : "-"}</p>
+                                                </div></>
+
+            ):(<p>Loading...</p>)}
+            
             </div>
             <ul className="card2">
             <li>
@@ -168,6 +175,7 @@ function Edit(){
             <input type='password' placeholder='confirm password'  value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)}/>
             </div>
             <div className='input6'>
+                <p style={{color:'red'}}>{message}</p>
             <button type='submit'>save</button>
             </div>
         </form>

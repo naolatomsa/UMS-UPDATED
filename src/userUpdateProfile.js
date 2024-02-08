@@ -10,13 +10,15 @@ import { useAuth } from './Auth-context';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
 import { useRef } from 'react';
+import 'react-phone-input-2/lib/style.css';
+import PhoneInput from 'react-phone-input-2';
 
 const access = localStorage.getItem('access')
 
 const UserUpdateProfile = () => {
 
   const authInfo = useAuth();
-  console.log(authInfo)
+  // console.log(authInfo)
   const [location, setLocation] = useState();
   const [countries, setCountries] = useState([]);
   const [showCountriesList, setShowCountriesList] = useState(false);
@@ -74,6 +76,7 @@ const UserUpdateProfile = () => {
       formData.append('phone', phone);
       // formData.append('date', date);
       formData.append('location', location);
+      formData.append('email', email);
       formData.append('image', image);
       try {
         const response = await axios.post('http://127.0.0.1:8000/api/update_profile', formData,
@@ -108,7 +111,7 @@ const UserUpdateProfile = () => {
     {
            
       authInfo?
-      <><TopBar home={'/userpro'} nav={'/userpro'} name={authInfo.user.first_name} fname={authInfo.user.last_name} imageSrc={authInfo.user.userprofile!=null?authInfo.user.userprofile.photo:image} /><div className="card auserboard">
+      <><TopBar home={'/userpro'} nav={'/userpro'} name={authInfo.user.first_name} fname={authInfo.user.last_name} imageSrc={authInfo.user.userprofile!=null?authInfo.user.userprofile.photo:null} /><div className="card auserboard">
 
 
             <div className="wrapper userprofile" style={{ height: '50px' }}>
@@ -116,7 +119,7 @@ const UserUpdateProfile = () => {
               <a className='third after' style={{ fontSize: '17px' }}>Update profile</a>
             </div>
             <div style={{ position: 'relative' }}>
-              <IMG imgName={authInfo.user.userprofile != null ? authInfo.user.userprofile.photo : image} size={'100px'} />
+              <IMG imgName={authInfo.user.userprofile!==null?authInfo.user.userprofile.photo:null} size={'100px'} />
               <div style={{ position: 'absolute', bottom: 0, right: 0 }}>
                 <a onClick={handleImage}><img style={{ marginBottom: '30px', paddingLeft: '45px', width:'70px'}} src={process.env.PUBLIC_URL + '/Icons/addphoto.png'} alt='Add Photo' className="topicon" /></a>
               </div>
@@ -138,8 +141,8 @@ const UserUpdateProfile = () => {
                 <input type="text" placeholder="last name"  value={lastName} onChange={(e) => setLastName(e.target.value)} />
               </div>
 
-              <div className="gender" style={{ marginTop: '7.5px' }}>
-                <label>
+              <div className="gender" style={{ marginTop: '7.5px', marginLeft:'0' }}>
+                <label style={{marginLeft:'0px' }}>
                   <select value={gender} onChange={(e) => setGender(e.target.value)}>
                     <option value="" disabled selected>Gender</option>
                     <option>Male</option>
@@ -147,9 +150,27 @@ const UserUpdateProfile = () => {
                   </select>
                 </label>
               </div>
-              <div className='input3'>
-                <input type='tel' placeholder='phone'  value={phone} onChange={(e) => setPhone(e.target.value)} />
-              </div>
+              <div className='input2'>
+          <PhoneInput
+          
+          style={{marginTop: '10px', border: '1px solid #38A899', borderRadius:'3px'}}
+          inputProps={{
+            style: {
+              backgroundColor: '#eee',
+              padding: '12px 15px',
+              border: 'none',
+              margin: '8px 0',
+              marginLeft:'30px',
+              width: '270px',
+              height: '50px',   
+            },
+          }}
+          country={'et'}
+          value={phone} 
+          onChange={(phone) => setPhone(phone)} 
+      />
+          
+          </div>
               <div className='inputcountry gender' style={{ marginTop: '7.5px' }}>
                 <select
                   value={location}

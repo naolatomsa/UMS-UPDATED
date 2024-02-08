@@ -8,7 +8,7 @@ import './proofadmin.css';
 import { useAuth } from './Auth-context';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
-
+import { useRef } from 'react';
 
 const access = localStorage.getItem('access')
 
@@ -22,7 +22,11 @@ const ProfileOfAdmin = () => {
   const [phone, setPhone] = useState('');
   const [gender, setGender] = useState('');
   const [email, setEmail] = useState('');
+  const [image, setImage] = useState('')
   const navigate = useNavigate()
+  const fileInputRef = useRef(null);
+
+
 
 
   useEffect(() => {
@@ -64,10 +68,20 @@ const ProfileOfAdmin = () => {
 
     const handleAdminUpdateProfile = async(e) => {
       e.preventDefault();
+
+      const formData = new FormData();
+      formData.append('firstName', firstName);
+      formData.append('lastName', lastName);  
+      formData.append('gender', gender);
+      formData.append('phone', phone);
+      // formData.append('date', date);
+      formData.append('location', location);
+      formData.append('image', image);
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/update_profile',{ 
-          firstName, lastName, location, phone, gender, email, 
-          },
+        const response = await axios.post('http://127.0.0.1:8000/api/update_profile',formData,
+        // { 
+        //   firstName, lastName, location, phone, gender, email, 
+        //   },
           {
             headers: {
               Authorization: `Bearer ${access}`,
@@ -84,6 +98,11 @@ const ProfileOfAdmin = () => {
 
   
     };
+    const handleImage = () => {
+      // Trigger the file input when the icon is clicked
+      fileInputRef.current.click();
+    };
+    
   return (
     <>
     {
@@ -96,8 +115,13 @@ const ProfileOfAdmin = () => {
 
                 <div className="card">
                   <div className="card1">
-                    <IMG imgName={authInfo.user.userprofile.photo!=null?authInfo.user.userprofile.photo:null}
-                      size={'100px'} />
+                  <div style={{ position: 'relative' }}>
+                      <IMG imgName={authInfo.user.userprofile != null ? authInfo.user.userprofile.photo : image} size={'100px'} />
+                      <div style={{ position: 'absolute', bottom: 0, right: 0 }}>
+                        <a onClick={handleImage}><img style={{ marginTop: '50px',paddingRight:'80px', width:'100px'}} src={process.env.PUBLIC_URL + '/Icons/addphoto.png'} alt='Add Photo' className="topicon" /></a>
+                      </div>
+                    </div>
+                      
                     <div className="card__text">
 
                       <h2>{authInfo.user.first_name} {authInfo.user.last_name}</h2>
@@ -138,6 +162,12 @@ const ProfileOfAdmin = () => {
 
               <form className='form editform admin-pro' onSubmit={handleAdminUpdateProfile}>
                 <h1 className='htwo'>Update Profile</h1>
+                <input
+                type="file" accept="image/*" value={FormData.image} onChange={(e) => setImage(e.target.files[0])}
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+      
+              />
                 <div className='input3'>
                   <input type='text' placeholder='first name' required value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                 </div>
@@ -145,7 +175,7 @@ const ProfileOfAdmin = () => {
                   <input type="text" placeholder="last name" required value={lastName} onChange={(e) => setLastName(e.target.value)} />
                 </div>
                 <div className="gender" style={{ marginTop: '7.5px' }}>
-                  <label>
+                  <label style={{marginLeft:'0px' }}>
                     <select value={gender} onChange={(e) => setGender(e.target.value)}>
                       <option value="" disabled selected>Gender</option>
                       <option>Male</option>
