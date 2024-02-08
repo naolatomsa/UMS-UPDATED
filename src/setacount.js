@@ -63,18 +63,12 @@ function SetAcount() {
     try {
       const response = await axios.post(
         'http://127.0.0.1:8000/api/update_profile', formData,
-        // {
-        //   firstName, lastName, gender, phone, date, location, image,
-        // },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-
-      // console.log('Form data sent successfully!', response.data);
-
       toastr.success("You finished your account setup")
       setFirstName('')
       setLastName('')
@@ -111,12 +105,7 @@ function SetAcount() {
           <div id="stylerec" />
           <div id="poly1" />
           <div className='midlep'>
-            {/* <div>
-            <img src={process.env.PUBLIC_URL + '/Icons/userphoto.png'} style={{backgroundImage: `url('${process.env.PUBLIC_URL}/Icons/backimage.png')`, backgroundSize: 'cover', 
-              backgroundRepeat: 'no-repeat',backgroundPosition: 'center', height:'100px', width:'100px'}} alt='Back'  className="topicon"/>
-            </div> */}
-        
-            <p className='fp'>
+        <p className='fp'>
             Set up your profile. Let’s know a little bit about you.
             </p>
             <p className='fp'> This won’t take long.</p>

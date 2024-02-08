@@ -24,7 +24,6 @@ function Edit(){
     const [confirmPassword, setConfirmPassword] = useState('');
     const { userId } = useParams();
     const [userData, setUserData] = useState({});
-    // const [image, setImage] = useState('')
     const [userActivities, setUserActivities] = useState([]);
     const [message, setMessage] = useState('')
     const navigate = useNavigate();
@@ -54,9 +53,6 @@ function Edit(){
         } catch (error) {
         }
         };
-
-      
-
         fetchData();
     }, []);
 
@@ -65,17 +61,11 @@ function Edit(){
         if (userData) {
           setEmail(userData.email);
           setUserName(userData.username);
-        //   if(userData.userprofile!=null){
-        //     setImage(userData.userprofile.photo)
-
-        //   }
           
         }
       }, [userData]);
-    
 
     //admin edit user
-
     const handleEdituser = async(e)=>{
         e.preventDefault();
 
@@ -113,21 +103,12 @@ function Edit(){
             }catch(error){
     
             }
-         
-
         }
         else{
-            toastr.warning('Password Doesn`t much');
-                
+            toastr.warning('Password Doesn`t much');         
         }
-
-
     }
-
-
-
-
-    return(
+  return(
         
 
         <>
@@ -142,13 +123,15 @@ function Edit(){
             <div className="card1">
             { userData.userprofile!=null?
             (
-                <><IMG  imgName={userData.userprofile!==null?userData.userprofile.photo:null}
-                                                size={'100px'} /><div className="card__text">
+          <>
+          <IMG  imgName={userData.userprofile!==null?userData.userprofile.photo:null}
+          size={'100px'} /><div className="card__text">
 
-                                                    <h2>{userData.first_name} {userData.last_name}</h2>
+          <h2>{userData.first_name} {userData.last_name}</h2>
 
-                                                    <p style={{ color: 'black' }}>{userData.userprofile.location!= null ? userData.userprofile.location : "-"}</p>
-                                                </div></>
+          <p style={{ color: 'black' }}>{userData.userprofile.location!= null ? userData.userprofile.location : "-"}</p>
+          </div>
+          </>
 
             ):(<p>Loading...</p>)}
             
@@ -193,8 +176,6 @@ function Edit(){
         <div className='input3'>
             <input type='password' placeholder='password'  value={Password} onChange={(e)=>setPassword(e.target.value)}/>
             </div>
-       
-
             <div className='inputfour'>
             <input type='password' placeholder='confirm password'  value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)}/>
             </div>
@@ -203,7 +184,6 @@ function Edit(){
             <button type='submit'>save</button>
             </div>
         </form>
-        
         <div className='activitybox'> 
         <table className="responsivetable activitytable" style={{width:'770px', marginLeft:'0'}}>
             <thead>

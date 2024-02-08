@@ -86,9 +86,6 @@ const UserUpdateProfile = () => {
       formData.append('image', image);
       try {
         const response = await axios.post('http://127.0.0.1:8000/api/update_profile', formData,
-          // { 
-          //   firstName, lastName, location, phone, gender, email, 
-          // },
           {
             headers: {
               Authorization: `Bearer ${access}`,
