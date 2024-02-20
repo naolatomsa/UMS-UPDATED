@@ -100,7 +100,7 @@ const handleDelete = async (userId) => {
     <>
     {
       authInfo ?(    <div className="page">
-      <TopBar nav={'/adminpro'} name={authInfo.user.first_name} fname={authInfo.user.last_name} imageSrc={authInfo.user.userprofile.photo!=null?authInfo.user.userprofile.photo:null}/>
+      <TopBar nav={'/adminpro'} name={authInfo.user.first_name} fname={authInfo.user.last_name} imageSrc={authInfo.user.userprofile!=null?authInfo.user.userprofile.photo:null}/>
       <div className="user-man">
         <p style={{
         color: 'black' , fontWeight:'bold'

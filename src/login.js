@@ -1,3 +1,4 @@
+//importing
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import axios from 'axios';
@@ -8,6 +9,7 @@ import 'toastr/build/toastr.min.css';
 
 
 function Login() {
+  //creating states
   const [action, setAction] = useState('Login');
   const [isSignUp, setIsSignUp] = useState(false);
   const [Username, setUserName] = useState("")
@@ -17,6 +19,7 @@ function Login() {
   const [error, setError] = useState('');
   const [isValidPassword, setIsValidPassword] = useState(false);
   const navigate = useNavigate()
+  //used to switch between signup and login
   const switchForm = () => {
     setIsSignUp(!isSignUp);
     setAction(isSignUp ? 'Login' : 'Sign Up');
@@ -26,6 +29,7 @@ function Login() {
     
   };
 
+  //Regular expressions for validation
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])[a-zA-Z!@#$%^&*()_+0-9]{6,}$/;
   const isValid = passwordRegex.test(Password);
   useEffect(()=>{
@@ -66,7 +70,8 @@ function Login() {
       toastr.warning('Your password length must be 8 characters and above, it must contain at least one lowercase, one uppercase, one digit.  ');
       return;
     }
-  
+
+    //signup
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/signup/', {
         Username, Email, Password, ConfirmPassword
@@ -79,7 +84,8 @@ function Login() {
       window.location.reload();
       toastr.success('You have signed up successfully. Now you can finish your account setup or skip and finish later!');
   
-      localStorage.setItem('access', access);
+      //storing Token(both) to local storage
+      localStorage.setItem('access', access); 
       localStorage.setItem('refresh', refresh);
       localStorage.setItem('userRole', userRole);
     } catch (error) {
@@ -87,8 +93,6 @@ function Login() {
   };
 
     //login
-
-
     const handleLogin = async (e) => {
       e.preventDefault()
 
@@ -115,7 +119,7 @@ function Login() {
           window.location.reload();
         }
         
-  
+        //storing Token(both) to local storage
         localStorage.setItem('access', access);
         localStorage.setItem('refresh', refresh);
         localStorage.setItem('userRole', userRole);
@@ -127,9 +131,7 @@ function Login() {
       }
     };
 
-
-
-
+  //JSX
   return (
     <div className='all'>
       <div className='wow'>

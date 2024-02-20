@@ -1,3 +1,4 @@
+//importing
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
@@ -6,11 +7,14 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 
 const Changepassword = () => {
+  //creating States
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
-  const { userId } = useParams();
-  const { token } = useParams();
+  const { userId } = useParams(); //getting user Id from link
+  const { token } = useParams(); //getting token from link
+
+  //connection with backend
   const handleChangepassword = async(e) => {
     e.preventDefault();
 
@@ -25,10 +29,9 @@ const Changepassword = () => {
     }
     
   };
-  useEffect(() => {
-    // console.log('userId from URL:', userId);
-    // console.log('token from URL:', token);
-  }, []);
+
+
+  //JSX
   return (
     <div className='all'>
     <div className='wow'>

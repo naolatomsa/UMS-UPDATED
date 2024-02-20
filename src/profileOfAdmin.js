@@ -1,3 +1,4 @@
+//importing
 import React from 'react'
 import TopBar from './Topbar';
 import { useEffect, useState } from 'react';
@@ -12,10 +13,12 @@ import { useRef } from 'react';
 import 'react-phone-input-2/lib/style.css';
 import PhoneInput from 'react-phone-input-2';
 
-const access = localStorage.getItem('access')
+const access = localStorage.getItem('access') //getting access token from local storage
 
 const ProfileOfAdmin = () => {
-  const authInfo = useAuth();
+  const authInfo = useAuth(); //getting user's data
+  
+  //creating states
   const [location, setLocation] = useState('');
   const [countries, setCountries] = useState([]);
   const [showCountriesList, setShowCountriesList] = useState(false);
@@ -25,12 +28,12 @@ const ProfileOfAdmin = () => {
   const [gender, setGender] = useState('');
   const [email, setEmail] = useState('');
   const [image, setImage] = useState('')
-  const navigate = useNavigate()
-  const fileInputRef = useRef(null);
+  const navigate = useNavigate() //creating navigate
+  const fileInputRef = useRef(null); //useref hook
 
 
 
-
+//setting initial vlaue of the states
   useEffect(() => {
     if (authInfo) {
       if(authInfo.user.userprofile!=null){

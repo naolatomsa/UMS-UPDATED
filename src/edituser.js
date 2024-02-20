@@ -1,3 +1,4 @@
+//Importing
 import React from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -14,10 +15,11 @@ import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
 
 
-const token = localStorage.getItem('access');
+const token = localStorage.getItem('access'); //getting token from local storage
 function Edit(){
-    const authInfo = useAuth();
+    const authInfo = useAuth(); //getting users data
     
+    //creating states
     const [Username, setUserName] = useState('');
     const [Email, setEmail] = useState('');
     const [Password, setPassword] = useState('');
@@ -69,45 +71,86 @@ function Edit(){
     const handleEdituser = async(e)=>{
         e.preventDefault();
 
-        if(Password===confirmPassword)
+        if(Password || confirmPassword!==(''))
         {
-            const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
-            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-          
-            if (!usernameRegex.test(Username)) {
-              toastr.warning('Invalid username format');
-              return;
-            }
-          
-            if (!emailRegex.test(Email)) {
-              toastr.warning('Invalid email format');
-              return;
-            }
-          
-            if (!passwordRegex.test(Password)) {
-              toastr.warning('Your password length must be 8 characters and above, it must contain at least one lowercase, one uppercase, one digit.  ');
-              return;
-            }
-            try{
-                const response = await axios.put(`http://127.0.0.1:8000/api/user_profile_by_admin/${userId}`,{
-                    Username, Password, confirmPassword, Email
-                },
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
+          if(Password===confirmPassword)
+          {
+              const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+              const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+              const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+            
+              if (!usernameRegex.test(Username)) {
+                toastr.warning('Invalid username format');
+                return;
+              }
+            
+              if (!emailRegex.test(Email)) {
+                toastr.warning('Invalid email format');
+                return;
+              }
+            
+              if (!passwordRegex.test(Password)) {
+                toastr.warning('Your password length must be 8 characters and above, it must contain at least one lowercase, one uppercase, one digit.  ');
+                return;
+              }
+              try{
+                  const response = await axios.put(`http://127.0.0.1:8000/api/user_profile_by_admin/${userId}`,{
+                      Username, Password, confirmPassword, Email
                   },
-                }
-                );
-                
-            }catch(error){
-    
-            }
+                  {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  }
+                  );
+                  
+              }catch(error){
+      
+              }
+          }
+          else{
+              toastr.warning('Password Doesn`t much');         
+          }
+
         }
         else{
-            toastr.warning('Password Doesn`t much');         
+          const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          // const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+        
+          if (!usernameRegex.test(Username)) {
+            toastr.warning('Invalid username format');
+            return;
+          }
+        
+          if (!emailRegex.test(Email)) {
+            toastr.warning('Invalid email format');
+            return;
+          }
+        
+          // if (!passwordRegex.test(Password)) {
+          //   toastr.warning('Your password length must be 8 characters and above, it must contain at least one lowercase, one uppercase, one digit.  ');
+          //   return;
+          }
+          try{
+              const response = await axios.put(`http://127.0.0.1:8000/api/user_profile_by_admin/${userId}`,{
+                  Username, Password, confirmPassword, Email
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+              );
+              
+          }catch(error){
+  
+          }
+
         }
-    }
+   
+
+    //JSX
   return(
         
 
@@ -184,7 +227,7 @@ function Edit(){
             <button type='submit'>save</button>
             </div>
         </form>
-        <div className='activitybox'> 
+      <div className='activitybox'> 
         <table className="responsivetable activitytable" style={{width:'770px', marginLeft:'0'}}>
             <thead>
                 <tr className="Date">

@@ -1,3 +1,4 @@
+//importing
 import React from 'react'
 import { useEffect, useState } from 'react';
 import TopBar from './Topbar'
@@ -13,23 +14,29 @@ import { useRef } from 'react';
 import 'react-phone-input-2/lib/style.css';
 import PhoneInput from 'react-phone-input-2';
 
-const access = localStorage.getItem('access')
+const access = localStorage.getItem('access') //getting access token from local storage
 
 const UserUpdateProfile = () => {
 
-  const authInfo = useAuth();
-  // console.log(authInfo)
+  const authInfo = useAuth(); //getting User's data
+ 
+  //creating states
   const [location, setLocation] = useState();
   const [countries, setCountries] = useState([]);
   const [showCountriesList, setShowCountriesList] = useState(false);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [person, setPerson] = useState({
+    firstName: authInfo && authInfo.user ? authInfo.user.first_name: '',
+    lastName: authInfo && authInfo.user ? authInfo.user.last_name: ''
+  });
+  // const [firstName, setFirstName] = useState('');
+  // const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('');
   const [gender, setGender] = useState('');
   const [email, setEmail] = useState('');
   const [image, setImage] = useState('')
   const fileInputRef = useRef(null);
 
+  //setting initial value of the created state
   useEffect(() => {
     if (authInfo) {
       if(authInfo.user.userprofile!=null){
@@ -40,14 +47,16 @@ const UserUpdateProfile = () => {
 
       }
       
-      setFirstName(authInfo.user.first_name);
-      setLastName(authInfo.user.last_name);
+      // setFirstName(authInfo.user.first_name);
+      // setLastName(authInfo.user.last_name);
       setEmail(authInfo.user.email);
     }
   }, []);
 
 
   const navigate = useNavigate()
+
+  //libraries used to get countries list 
   useEffect(() => {
     const fetchCountries = async () => {
       try {
@@ -67,31 +76,35 @@ const UserUpdateProfile = () => {
       setLocation(selectedCountry.name);
       setShowCountriesList(false);
     };
+
+    //updating....
     const handleUserUpdateProfile = async(e) => {
       e.preventDefault();
-
+      
+      //regular expressions for validation
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       if (!emailRegex.test(email)) {
         toastr.warning('Invalid email format');
         return;
       }
       const formData = new FormData();
-      formData.append('firstName', firstName);
-      formData.append('lastName', lastName);  
+      formData.append('firstName', person.firstName);
+      formData.append('lastName', person.lastName);  
       formData.append('gender', gender);
       formData.append('phone', phone);
-      // formData.append('date', date);
       formData.append('location', location);
       formData.append('email', email);
       formData.append('image', image);
       try {
         const response = await axios.post('http://127.0.0.1:8000/api/update_profile', formData,
+
           {
             headers: {
               Authorization: `Bearer ${access}`,
             },
           }
         );
+        
 
       }catch(error){
       }
@@ -100,15 +113,16 @@ const UserUpdateProfile = () => {
       setPhone("")
       setLocation("")
       setGender("")
-      setFirstName("")
-      setLastName("")
+      // setFirstName("")
+      // setLastName("")
       window.location.reload();
     };
     const handleImage = () => {
-      // Trigger the file input when the icon is clicked
-      fileInputRef.current.click();
+      fileInputRef.current.click(); // Trigger the file input when the icon is clicked
     };
     
+
+  //JSX  
   return (
     <>
     {
@@ -138,10 +152,16 @@ const UserUpdateProfile = () => {
       
               />
               <div className='input3'>
-                <input type='text' placeholder='first name'  value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                
+              <input 
+                    type='text' 
+                    placeholder='first name'  
+                    value={person.firstName} 
+                    onChange={(e) => setPerson({ ...person, firstName: e.target.value })} 
+                  />
               </div>
               <div className='input2'>
-                <input type="text" placeholder="last name"  value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                <input type="text" placeholder="last name"  value={person.lastName} onChange={(e) => setPerson({ ...person, lastName: e.target.value })} />
               </div>
 
               <div className="gender" style={{ marginTop: '7.5px', marginLeft:'0' }}>
@@ -204,6 +224,9 @@ const UserUpdateProfile = () => {
                 <input type='email' placeholder='email'  value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
               <div className='input6' style={{ gridColumn: '-3 / -1', paddingLeft: '240px' }}>
+                {
+                  
+                }
                 <button type='submit'>Update</button>
               </div>
             </form>

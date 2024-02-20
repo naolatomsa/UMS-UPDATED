@@ -1,3 +1,4 @@
+//importing
 import React from 'react';
 import { useEffect, useState } from 'react';
 import {useNavigate} from 'react-router-dom';
@@ -9,8 +10,10 @@ import 'toastr/build/toastr.min.css';
 import 'react-phone-input-2/lib/style.css';
 import PhoneInput from 'react-phone-input-2';
 
-const token = localStorage.getItem('access')
+const token = localStorage.getItem('access') //getting access token from local storage
 function SetAcount() {
+  
+  //creating states
   const [save, setSave] = useState('Save Changes');
   const [lastName, setLastName] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -22,9 +25,9 @@ function SetAcount() {
   const [countries, setCountries] = useState([]);
   const [showCountriesList, setShowCountriesList] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate() //navigate
 
-    
+  //libraries used to get list of countries
   useEffect(() => {
     const fetchCountries = async () => {
       try {
@@ -48,7 +51,7 @@ function SetAcount() {
 
 
 
-
+  //setting account
   const handleSave = async (e) => {
     e.preventDefault();
 
@@ -84,6 +87,7 @@ function SetAcount() {
     }
   };
 
+  //used to clear the input field (setSates(''))
   const handleClear=()=>{
     setFirstName("");
     setLastName("")
@@ -96,7 +100,7 @@ function SetAcount() {
 
   }
    
-
+ //JSX
   return (
     <div className='all'>
       <div className='wow'>
